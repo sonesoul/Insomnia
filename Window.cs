@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace Insomnia
 {
-    public class Window(Point size, Point resolution)
+    public class Window
     {
         public bool IsOpened { get; private set; } = false;
 
@@ -13,8 +13,14 @@ namespace Insomnia
         private Rectangle _destination;
         private RenderTexture2D _renderTarget;
 
-        private Point size = size;
-        private Point resolution = resolution;
+        private Point size;
+        private Point resolution;
+
+        public Window(Point size, Point resolution)
+        {
+            this.size = size;
+            this.resolution = resolution;
+        }
 
         public void Open()
         {
