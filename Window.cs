@@ -6,10 +6,14 @@ namespace Insomnia
 {
     public class Window
     {
+        public static Point Size { get; } = new Point(400, 400);
+        public static Point Resolution { get; } = new Point(128, 128);
+
         public bool IsOpened { get; private set; } = false;
-        public static bool IsVisible { get; private set; } = true;
+        public bool IsVisible { get; private set; } = true;
 
         public event Action<float> Draw;
+        public event Action DrawEnd;
 
         private Rectangle _source;
         private Rectangle _destination;
@@ -18,10 +22,10 @@ namespace Insomnia
         private Point size;
         private Point resolution;
 
-        public Window(Point size, Point resolution)
+        public Window()
         {
-            this.size = size;
-            this.resolution = resolution;
+            size = Size;
+            resolution = Resolution;
         }
 
         public void Open()
@@ -31,9 +35,8 @@ namespace Insomnia
             int sX = size.X;
             int sY = size.Y;
 
-            Raylib.InitWindow(sX, sY, nameof(Insomnia));
+            Raylib.InitWindow(sX, sY, Program.Name);
             Raylib.SetExitKey(KeyboardKey.F1);
-
 
             _renderTarget = Raylib.LoadRenderTexture(rX, rY);
             _source = new(0, 0, rX, -rY);
@@ -53,6 +56,7 @@ namespace Insomnia
             BeginDrawing();
             Draw?.Invoke(Raylib.GetFrameTime());
             EndDrawing();
+            DrawEnd?.Invoke();
         }
 
         private void BeginDrawing()
@@ -69,13 +73,19 @@ namespace Insomnia
             Raylib.EndDrawing();
         }        
         
-        public static void Show()
+        public void Show()
         {
+            if (!IsOpened)
+                return;
+
             Raylib.ClearWindowState(ConfigFlags.HiddenWindow);
             IsVisible = true;
         }
-        public static void Hide()
+        public void Hide()
         {
+            if (!IsOpened)
+                return;
+
             Raylib.SetWindowState(ConfigFlags.HiddenWindow);
             IsVisible = false;
         }
