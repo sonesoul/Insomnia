@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Numerics;
+using Raylib_cs;
 
 namespace Insomnia
 {
     public class Window
     {
         public bool IsOpened { get; private set; } = false;
+        public static bool IsVisible { get; private set; } = true;
 
         public event Action<float> Draw;
 
@@ -65,6 +67,17 @@ namespace Insomnia
 
             Raylib.DrawTexturePro(_renderTarget.Texture, _source, _destination, new Vector2(0, 0), 0f, Color.White);
             Raylib.EndDrawing();
+        }        
+        
+        public static void Show()
+        {
+            Raylib.ClearWindowState(ConfigFlags.HiddenWindow);
+            IsVisible = true;
+        }
+        public static void Hide()
+        {
+            Raylib.SetWindowState(ConfigFlags.HiddenWindow);
+            IsVisible = false;
         }
     }
 }
