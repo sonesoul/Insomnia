@@ -6,7 +6,9 @@ namespace Insomnia.Assets
     {
         public IconAsset(string relativePath) : base(relativePath)
         {
-            Data = new Icon(GetAbsolutePath(relativePath));
+            Data = Load(relativePath);
         }
+
+        public static Icon Load(string relativePath) => new(GetAbsolutePath(relativePath));
     }
 }

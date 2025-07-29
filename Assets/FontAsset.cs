@@ -7,10 +7,15 @@ namespace Insomnia.Assets
     {
         public FontAsset(string relativePath, float size) : base(relativePath)
         {
+            Data = Load(relativePath, size);
+        }
+
+        public static Font Load(string relativePath, float size)
+        {
             PrivateFontCollection pfc = new();
             string absolute = GetAbsolutePath(relativePath);
             pfc.AddFontFile(absolute);
-            Data = new(pfc.Families[0], size);
+            return new(pfc.Families[0], size);
         }
     }
 }
