@@ -3,11 +3,13 @@ using Font = System.Drawing.Font;
 
 namespace Insomnia.Assets
 {
-    public class FontAsset : Asset<Font>
+    public class FontAsset : Asset
     {
+        public Font Font { get; private set; }
+
         public FontAsset(string relativePath, float size) : base(relativePath)
         {
-            Data = Load(relativePath, size);
+            Font = Load(relativePath, size);
         }
 
         public static Font Load(string relativePath, float size)

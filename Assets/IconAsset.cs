@@ -2,11 +2,13 @@
 
 namespace Insomnia.Assets
 {
-    public class IconAsset : Asset<Icon>
+    public class IconAsset : Asset
     {
+        public Icon Icon { get; private set; }
+
         public IconAsset(string relativePath) : base(relativePath)
         {
-            Data = Load(relativePath);
+            Icon = Load(relativePath);
         }
 
         public static Icon Load(string relativePath) => new(GetAbsolutePath(relativePath));
