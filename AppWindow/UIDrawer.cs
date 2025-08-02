@@ -1,18 +1,14 @@
-﻿namespace Insomnia
-{
-    public interface IUIElement
-    {
-        public void Draw(float dt);
-    }
+﻿using Insomnia.AppWindow.Elements;
 
+namespace Insomnia.AppWindow
+{
     public class UIDrawer
     {
         private IUIElement[] _elements;
 
-        public UIDrawer(Window window, IUIElement[] elements)
+        public UIDrawer(IUIElement[] elements)
         {
             _elements = elements;
-            window.Draw += Draw;
         }
         
         public void Draw(float dt)
@@ -22,7 +18,5 @@
                 _elements[i].Draw(dt);
             }
         }
-    }
-
-    
+    }   
 }

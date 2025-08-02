@@ -2,12 +2,12 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace Insomnia
+namespace Insomnia.AppWindow
 {
     public class Window
     {
-        public static Point Size { get; } = new Point(400, 400);
         public static Point Resolution { get; } = new Point(128, 128);
+        public static Point Size { get; } = new Point(Resolution.X * 3, Resolution.Y * 3);
 
         public bool IsOpened { get; private set; } = false;
         public bool IsVisible { get; private set; } = true;
@@ -68,7 +68,7 @@ namespace Insomnia
         {
             Raylib.EndTextureMode();
             Raylib.BeginDrawing();
-
+            Raylib.DrawTextureV(_renderTarget.Texture, Vector2.Zero, Color.White);
             Raylib.DrawTexturePro(_renderTarget.Texture, _source, _destination, new Vector2(0, 0), 0f, Color.White);
             Raylib.EndDrawing();
         }        

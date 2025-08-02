@@ -3,6 +3,7 @@
 using System.Windows.Forms;
 using Raylib_cs;
 using Insomnia.AppTray;
+using Insomnia.AppWindow;
 
 namespace Insomnia
 {
@@ -12,10 +13,16 @@ namespace Insomnia
         public static AwakeKeeper AwakeKeeper { get; private set; } = new();
         public static Tray Tray { get; } = new();
 
+        public static UIDrawer UI { get; private set; } 
+
         public const string Name = "Insomnia";
 
         private static void Main()
         {
+            UI = new(new AppWindow.Elements.IUIElement[] { new AppWindow.Elements.Label() { } });
+            Window.Draw += UI.Draw;
+            Window.Draw += (dt) => Raylib.DrawPixel(0, 0, Color.Red);
+            
             Window.Open();
 
             while (Window.IsOpened)
