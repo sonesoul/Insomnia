@@ -1,5 +1,4 @@
-﻿using Insomnia.AppTray;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Insomnia.AppTray.Buttons
 {

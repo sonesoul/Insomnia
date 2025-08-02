@@ -1,7 +1,5 @@
 ﻿global using Point = System.Drawing.Point;
 
-using System;
-using System.Threading;
 using System.Windows.Forms;
 using Raylib_cs;
 using Insomnia.AppTray;
