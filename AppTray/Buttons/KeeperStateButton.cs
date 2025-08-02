@@ -1,4 +1,4 @@
-﻿using Insomnia.Assets;
+﻿using Insomnia.Assets.Tray;
 using System;
 using System.Windows.Forms;
 

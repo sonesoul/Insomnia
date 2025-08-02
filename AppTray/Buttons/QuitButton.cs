@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Insomnia.AppWindow;
+using System;
 
 namespace Insomnia.AppTray.Buttons
 {
