@@ -21,8 +21,7 @@ namespace Insomnia
         {
             UI = new(new AppWindow.Elements.IUIElement[] { new AppWindow.Elements.Label() { } });
             Window.Draw += UI.Draw;
-            Window.Draw += (dt) => Raylib.DrawPixel(0, 0, Color.Red);
-            
+
             Window.Open();
 
             while (Window.IsOpened)

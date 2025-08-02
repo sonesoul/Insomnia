@@ -1,6 +1,7 @@
-﻿using System;
-using System.Numerics;
+﻿using Insomnia.Assets.Window;
 using Raylib_cs;
+using System;
+using System.Numerics;
 
 namespace Insomnia.AppWindow
 {
@@ -68,7 +69,6 @@ namespace Insomnia.AppWindow
         {
             Raylib.EndTextureMode();
             Raylib.BeginDrawing();
-            Raylib.DrawTextureV(_renderTarget.Texture, Vector2.Zero, Color.White);
             Raylib.DrawTexturePro(_renderTarget.Texture, _source, _destination, new Vector2(0, 0), 0f, Color.White);
             Raylib.EndDrawing();
         }        

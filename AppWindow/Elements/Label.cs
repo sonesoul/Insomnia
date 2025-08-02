@@ -1,4 +1,5 @@
-﻿using Insomnia.Assets.Window;
+﻿using Insomnia.Assets;
+using Insomnia.Assets.Window;
 using Raylib_cs;
 using System.Numerics;
 
@@ -6,17 +7,16 @@ namespace Insomnia.AppWindow.Elements
 {
     public class Label : IUIElement
     {
-        public string Text { get; set; } = "label";
+        public string Text { get; set; } = "Label";
 
         public Vector2 Position { get; set; } = Vector2.Zero;
         public Vector2 Origin { get; set; } = Vector2.Zero;
         
-        public Color Color { get; set; } = Color.White;
+        public Color Color { get; set; } = Palette.White;
 
         public float RotationRad { get; set; } = 0;
-        public float Scale { get; set; } = 5f;
-        public float Spacing { get; set; } = 0;
-
+        public float Scale { get; set; } = 1f;
+        
         public void Draw(float dt)
         {
             Raylib.DrawTextPro(
@@ -25,8 +25,8 @@ namespace Insomnia.AppWindow.Elements
                 Position, 
                 Origin, 
                 RotationRad, 
-                Scale, 
-                Spacing, 
+                5 * Scale, 
+                0, 
                 Color);
         }
     }
