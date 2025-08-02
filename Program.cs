@@ -16,14 +16,9 @@ namespace Insomnia
 
         public const string Name = "Insomnia";
 
-        [STAThread]
         private static void Main()
         {
             Window.Open();
-
-            Thread trayThread = new(Application.Run);
-            trayThread.SetApartmentState(ApartmentState.STA);
-            trayThread.Start();
 
             while (Window.IsOpened)
             {
@@ -31,7 +26,7 @@ namespace Insomnia
                 {
                     Window.Close();
                     break;
-                } 
+                }
                 else if (Raylib.WindowShouldClose())
                 {
                     Window.Hide();
