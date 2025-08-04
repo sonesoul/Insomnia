@@ -1,24 +1,6 @@
 ﻿namespace Insomnia.Assets
 {
-    public struct RGB
-    {
-        public byte R;
-        public byte G;
-        public byte B;
-
-        public RGB(byte r, byte g, byte b)
-        {
-            R = r;
-            G = g;
-            B = b;
-        }
-
-        public readonly Raylib_cs.Color ToRaylib() => new Raylib_cs.Color(R, G, B);
-        public readonly System.Drawing.Color ToDrawing() => System.Drawing.Color.FromArgb(R, G, B);
-
-        public static implicit operator Raylib_cs.Color(RGB rgb) => rgb.ToRaylib();
-        public static implicit operator System.Drawing.Color(RGB rgb) => rgb.ToDrawing();
-    }
+    
 
     public class Palette
     {

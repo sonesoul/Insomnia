@@ -1,5 +1,4 @@
-﻿using Insomnia.AppWindow;
-using Insomnia.Assets.Tray;
+﻿using Insomnia.Assets.Tray;
 using System.Drawing;
 using System.Windows.Forms;
 
