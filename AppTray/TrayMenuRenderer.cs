@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using Insomnia.Assets;
+using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
@@ -6,16 +7,18 @@ namespace Insomnia.AppTray
 {
     public class TrayMenuRenderer : ToolStripProfessionalRenderer
     {
-        public static Color PicoGray { get; } = Color.FromArgb(194, 195, 199);
-        public static Color PicoWhite { get; } = Color.FromArgb(255, 241, 232);
-        public static Color PicoBlack { get; } = Color.FromArgb(0, 0, 0);
-   
-        public static Color StripBackground => PicoGray;
-        public static Color ItemBackground => PicoBlack;
-        public static Color Text => PicoBlack;
-        public static Color TextSelected => PicoWhite;
-
         public const int LeftPadding = 9;
+
+        private readonly SolidBrush _brushStripBack = new(Palette.LightGray);
+        private readonly SolidBrush _brushItemBack = new(Palette.Black);
+        private readonly SolidBrush _brushText = new(Palette.Black);
+        private readonly SolidBrush _brushTextSelected = new(Palette.White);
+
+        private readonly StringFormat _stringFormat = new() 
+        {
+            Alignment = StringAlignment.Near,
+            LineAlignment = StringAlignment.Center,
+        };
 
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
@@ -23,45 +26,41 @@ namespace Insomnia.AppTray
             ToolStripItem item = e.Item;
 
             graphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
-            
-            using var sf = new StringFormat()
-            {
-                Alignment = StringAlignment.Near,
-                LineAlignment = StringAlignment.Center
-            };
 
             Rectangle textRect = item.ContentRectangle;
             textRect.X = LeftPadding * TrayMenu.PixelScale;
 
-            using var brush = new SolidBrush(item.Selected ? TextSelected : Text);
-
+            TextRenderer.DrawText(e.Graphics, item.Text, item.Font, textRect, item.Selected ? Palette.White : Palette.Black, Color.Transparent, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+            
+            return;
+            
+            //sometimes occures AccessViolationException, but looks better :(
             graphics.DrawString(
-                e.Text, 
-                e.TextFont, 
-                brush, 
-                textRect, 
-                sf);
+                    e.Text,
+                    item.Font,
+                    item.Selected ? _brushTextSelected : _brushText,
+                    textRect,
+                    _stringFormat);
         }
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
             ToolStripItem item = e.Item;
 
-            if (item.Selected)
+            if (!item.Selected)
             {
-                using var brush = new SolidBrush(ItemBackground);
-
-                e.Graphics.FillRectangle(brush, new Rectangle(Point.Empty, item.Size));
+                return;
             }
+
+            e.Graphics.FillRectangle(
+                _brushItemBack, 
+                new Rectangle(Point.Empty, item.Size));
         }
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e) 
         {
-            using var brush = new SolidBrush(StripBackground);
-
             e.Graphics.FillRectangle(
-                brush, 
+                _brushStripBack, 
                 new Rectangle(Point.Empty, e.ToolStrip.Size));
         }
-
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e) { }
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e) { }
