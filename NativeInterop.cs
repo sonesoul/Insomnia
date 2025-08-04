@@ -38,15 +38,17 @@ namespace Insomnia
 
         public const int SW_HIDE = 0;
         public const int SW_SHOW = 5;
+        public const int SW_RESTORE = 9;
+
         public const uint INPUT_MOUSE = 0;
         public const uint MOUSEEVENTF_MOVE = 0x0001;
 
         [DllImport("user32.dll")]
         private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
         [DllImport("user32.dll")]
-        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private static unsafe extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         [DllImport("user32.dll", SetLastError = true)]
-        static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+        private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
         public static TimeSpan GetIdleTime()
         {
