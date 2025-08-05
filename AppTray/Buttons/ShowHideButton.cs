@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Insomnia.DirectMedia;
+using System;
 
 namespace Insomnia.AppTray.Buttons
 {

@@ -1,6 +1,7 @@
 ﻿using Insomnia.AppTray.Buttons;
 using System.Windows.Forms;
 using Insomnia.Assets.Tray;
+using Insomnia.DirectMedia;
 
 namespace Insomnia.AppTray
 {

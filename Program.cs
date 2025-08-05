@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Forms;
 using Insomnia.AppTray;
+using Insomnia.DirectMedia;
 using WindowFlags = SDL3.SDL.WindowFlags;
 
 namespace Insomnia
@@ -16,13 +17,13 @@ namespace Insomnia
 
         private static void Main()
         {
-            Window = new(Name, new Point(384, 384), new Point(128, 128), WindowFlags.OpenGL);
+            Window = new(Name, new Point(128, 128), new Point(384, 384), WindowFlags.OpenGL);
 
-            while (Window.IsOpened)
+            while (Window.IsRunning)
             {
                 AwakeKeeper.Update();
 
-                Window.RenderFrame();
+                Window.Update();
             }
 
             Tray.Icon.Visible = false;
