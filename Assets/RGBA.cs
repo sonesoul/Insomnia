@@ -13,7 +13,7 @@ namespace Insomnia.Assets
         public static RGBA White => new(255, 255, 255, 255);
         public static RGBA Black => new(0, 0, 0, 255);
 
-        public RGBA(byte r, byte g, byte b) : this(r, g, b, byte.MaxValue)
+        public RGBA(byte r, byte g, byte b) : this(r, g, b, 255)
         {
         }
 

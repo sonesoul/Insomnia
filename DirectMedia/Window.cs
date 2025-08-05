@@ -1,50 +1,36 @@
-﻿using SDL3;
+﻿using Insomnia.Assets;
 using System;
 using static SDL3.SDL;
 
 namespace Insomnia.DirectMedia
 {
-    public unsafe class Window
+    public unsafe class Window : IDisposable
     {
-        public bool IsRunning { get; private set; } = false;
         public bool IsVisible { get; private set; } = true;
-        public string Title { get; private set; }
-        
-        public event Action<float> Draw;
-        public event Action DrawEnd;
+
+        public event Action Draw;
+        public event Action<Event> Event;
+        public event Action Disposed;
 
         private IntPtr _handle;
-        private IntPtr _renderTarget;
         private IntPtr _renderer;
+        private IntPtr _texture;
 
-        private FRect _src;
-        private FRect _dst;
+        private Rect _src;
+        private Rect _dst;
 
-        private string _title;
+        private bool _disposed = false;
 
         public Window(string title, Point src, Point dst, WindowFlags flags)
         {
-            _src = new FRect { W = src.X, H = src.Y };
-            _dst = new FRect { W = dst.X, H = dst.Y };
+            _src = new Rect { W = src.X, H = src.Y };
+            _dst = new Rect { W = dst.X, H = dst.Y };
 
-            _title = title;
+            InitWindow(title, flags);
+            InitTexture(PixelFormat.ARGB64, TextureAccess.Target);
 
-            CreateWindowAndRenderer(_title, (int)_dst.W, (int)_dst.H, flags,
-                out _handle, 
-                out _renderer);
-
-            _renderTarget = CreateTexture(_renderer, PixelFormat.RGB24, TextureAccess.Target, (int)_src.W, (int)_src.H);
-            
             SetRenderDrawColor(_renderer, 0, 0, 0, 255);
-            SetTextureScaleMode(_renderTarget, ScaleMode.Nearest);
-
-            IsRunning = true;
-        }
-
-        public void Close()
-        {
-            DestroyWindow(_handle);
-            IsRunning = false;
+            SetTextureScaleMode(_texture, ScaleMode.Nearest);
         }
 
         public void Update()
@@ -53,33 +39,72 @@ namespace Insomnia.DirectMedia
 
             if ((EventType)e.Type == EventType.Quit || e.Key.Key == Keycode.F1)
             {
-                Close();
+                Dispose();
+                return;
             }
 
-            SetRenderTarget(_renderer, _renderTarget);
-            SetRenderDrawColor(_renderer, 255, 255, 255, 255);
+            Event?.Invoke(e);
 
-            //draw everything
+            if (_disposed)
+                return;
 
-            SetRenderTarget(_renderer, IntPtr.Zero);
-            SetRenderDrawColor(_renderer, 0, 0, 0, 255);
-            RenderClear(_renderer);
+            SetTarget(_texture);
+            Clear(RGBA.White);
 
-            SetRenderDrawColor(_renderer, 255, 255, 255, 255);
-            RenderTexture(_renderer, _renderTarget, IntPtr.Zero, IntPtr.Zero);            
+            Draw?.Invoke();
 
+            SetTarget(null);
+            Clear(RGBA.Black);
+
+            RenderTexture(_renderer, _texture, IntPtr.Zero, IntPtr.Zero);
             RenderPresent(_renderer);
 
-            Delay(32);
+            Delay(16);
         }
 
-        public void Show()
+        public void Show() => ShowWindow(_handle);
+        public void Hide() => HideWindow(_handle);
+
+        public void SetColor(Color c)
         {
-            HideWindow(_handle);
+            SetRenderDrawColor(_renderer, c.R, c.G, c.B, c.A);
         }
-        public void Hide()
+        public void SetTarget(IntPtr? renderTarget)
         {
-            ShowWindow(_handle);
+            SetRenderTarget(_renderer, renderTarget ?? IntPtr.Zero);
+        }
+        public void Clear(Color color)
+        {
+            SetColor(color);
+            RenderClear(_renderer);
+        }
+       
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+
+            _disposed = true;
+
+            DestroyWindow(_handle);
+            GC.SuppressFinalize(this);
+            Disposed?.Invoke();
+        }
+
+        private void InitWindow(string title, WindowFlags flags)
+        {
+            int w = (int)_dst.W;
+            int h = (int)_dst.H;
+
+            _handle = CreateWindow(title, w, h, flags);
+            _renderer = CreateRenderer(_handle, null);
+        }
+        private void InitTexture(PixelFormat format, TextureAccess access)
+        {
+            int w = (int)_src.W;
+            int h = (int)_src.H;
+
+            _texture = CreateTexture(_renderer, format, access, w, h);
         }
     }
 }
