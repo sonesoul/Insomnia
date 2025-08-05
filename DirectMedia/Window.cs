@@ -1,6 +1,5 @@
 ﻿using SDL3;
 using System;
-using System.Security.Cryptography;
 using static SDL3.SDL;
 
 namespace Insomnia.DirectMedia
@@ -14,10 +13,9 @@ namespace Insomnia.DirectMedia
         public event Action<float> Draw;
         public event Action DrawEnd;
 
-        private nint _handle;
-        private nint _renderTarget;
-        private nint _renderer;
-        private nint _targetRenderer;
+        private IntPtr _handle;
+        private IntPtr _renderTarget;
+        private IntPtr _renderer;
 
         private FRect _src;
         private FRect _dst;
@@ -31,7 +29,7 @@ namespace Insomnia.DirectMedia
 
             _title = title;
 
-            CreateWindowAndRenderer(_title, (int)_dst.W, (int)_dst.H, flags, 
+            CreateWindowAndRenderer(_title, (int)_dst.W, (int)_dst.H, flags,
                 out _handle, 
                 out _renderer);
 
@@ -61,14 +59,14 @@ namespace Insomnia.DirectMedia
             SetRenderTarget(_renderer, _renderTarget);
             SetRenderDrawColor(_renderer, 255, 255, 255, 255);
 
+            //draw everything
 
-
-            SetRenderTarget(_renderer, nint.Zero);
+            SetRenderTarget(_renderer, IntPtr.Zero);
             SetRenderDrawColor(_renderer, 0, 0, 0, 255);
             RenderClear(_renderer);
 
             SetRenderDrawColor(_renderer, 255, 255, 255, 255);
-            RenderTexture(_renderer, _renderTarget, nint.Zero, nint.Zero);            
+            RenderTexture(_renderer, _renderTarget, IntPtr.Zero, IntPtr.Zero);            
 
             RenderPresent(_renderer);
 
