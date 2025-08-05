@@ -17,17 +17,7 @@ namespace Insomnia.AppTray.Buttons
         {
             base.OnClick(e);
 
-            if (Window.IsOpened)
-            {
-                void CloseWindow()
-                {
-                    Window.Close();
-                    Window.DrawEnd -= CloseWindow;
-                }
-
-                Window.DrawEnd -= CloseWindow; //remove previous handler on multiple invocations
-                Window.DrawEnd += CloseWindow;
-            }
+            throw new NotImplementedException();
         }
     }
 }
