@@ -1,5 +1,4 @@
-﻿using Insomnia.Assets;
-using System;
+﻿using System;
 using static SDL3.SDL;
 
 namespace Insomnia.DirectMedia
@@ -16,15 +15,15 @@ namespace Insomnia.DirectMedia
         private IntPtr _renderer;
         private IntPtr _texture;
 
-        private Rect _src;
-        private Rect _dst;
+        private Rectangle _src;
+        private Rectangle _dst;
 
         private bool _disposed = false;
 
         public Window(string title, Point src, Point dst, WindowFlags flags)
         {
-            _src = new Rect { W = src.X, H = src.Y };
-            _dst = new Rect { W = dst.X, H = dst.Y };
+            _src = new Rectangle(, src);
+            _dst = new Rectangle();
 
             InitWindow(title, flags);
             InitTexture(PixelFormat.ARGB64, TextureAccess.Target);
@@ -49,13 +48,13 @@ namespace Insomnia.DirectMedia
                 return;
 
             SetTarget(_texture);
-            Clear(RGBA.White);
+            Clear(Color.White);
 
             Draw?.Invoke();
 
             SetTarget(null);
-            Clear(RGBA.Black);
-
+            Clear(Color.Black);
+            
             RenderTexture(_renderer, _texture, IntPtr.Zero, IntPtr.Zero);
             RenderPresent(_renderer);
 
@@ -67,7 +66,7 @@ namespace Insomnia.DirectMedia
 
         public void SetColor(Color c)
         {
-            SetRenderDrawColor(_renderer, c.R, c.G, c.B, c.A);
+            SetRenderDrawColor(_renderer, c.Red, c.Green, c.Blue, c.Alpha);
         }
         public void SetTarget(IntPtr? renderTarget)
         {
@@ -93,17 +92,15 @@ namespace Insomnia.DirectMedia
 
         private void InitWindow(string title, WindowFlags flags)
         {
-            int w = (int)_dst.W;
-            int h = (int)_dst.H;
+            _dst.Size.Deconstruct(out int w, out int h);
 
             _handle = CreateWindow(title, w, h, flags);
             _renderer = CreateRenderer(_handle, null);
         }
         private void InitTexture(PixelFormat format, TextureAccess access)
         {
-            int w = (int)_src.W;
-            int h = (int)_src.H;
-
+            _src.Size.Deconstruct(out int w, out int h);
+            
             _texture = CreateTexture(_renderer, format, access, w, h);
         }
     }

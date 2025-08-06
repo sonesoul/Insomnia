@@ -1,25 +1,27 @@
-﻿namespace Insomnia.Assets
+﻿using Insomnia.DirectMedia.Structures;
+
+namespace Insomnia.Assets
 {
     public class Palette
     {
-        public static RGBA Black => Colors[0];
-        public static RGBA DarkBlue => Colors[1];
-        public static RGBA DarkPurple => Colors[2];
-        public static RGBA DarkGreen => Colors[3];
-        public static RGBA Brown => Colors[4];
-        public static RGBA DarkGray => Colors[5];
-        public static RGBA LightGray => Colors[6];
-        public static RGBA White => Colors[7];
-        public static RGBA Red => Colors[8];
-        public static RGBA Orange => Colors[9];
-        public static RGBA Yellow => Colors[10];
-        public static RGBA Green => Colors[11];
-        public static RGBA Blue => Colors[12];
-        public static RGBA Indigo => Colors[13];
-        public static RGBA Pink => Colors[14];
-        public static RGBA Peach => Colors[15];
+        public static Color Black => Colors[0];
+        public static Color DarkBlue => Colors[1];
+        public static Color DarkPurple => Colors[2];
+        public static Color DarkGreen => Colors[3];
+        public static Color Brown => Colors[4];
+        public static Color DarkGray => Colors[5];
+        public static Color LightGray => Colors[6];
+        public static Color White => Colors[7];
+        public static Color Red => Colors[8];
+        public static Color Orange => Colors[9];
+        public static Color Yellow => Colors[10];
+        public static Color Green => Colors[11];
+        public static Color Blue => Colors[12];
+        public static Color Indigo => Colors[13];
+        public static Color Pink => Colors[14];
+        public static Color Peach => Colors[15];
 
-        private static readonly RGBA[] Colors = new RGBA[]
+        private static readonly Color[] Colors = new Color[]
         {
             new(0, 0, 0),         // Black
             new(29, 43, 83),      // Dark Blue
