@@ -1,4 +1,7 @@
-﻿namespace Insomnia.Structures
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Insomnia.Structures
 {
     public struct FRectangle(Vector2 position, Vector2 size)
     {
@@ -13,5 +16,27 @@
         private Vector2 _pos = position, _size = size;
 
         public FRectangle(float x, float y, float width, float height) : this(new(x, y), new(width, height)) { }
+
+        public static bool operator ==(FRectangle left, FRectangle right) => left.Equals(right); 
+        public static bool operator !=(FRectangle left, FRectangle right) => !(left == right); 
+        
+        public readonly override bool Equals([NotNullWhen(true)] object obj)
+        {
+            if (obj is not FRectangle frect)
+            {
+                return false;
+            }
+
+            return Equals(frect);
+        }
+        public readonly override int GetHashCode()
+        {
+            return HashCode.Combine(Position.GetHashCode(), Size.GetHashCode());
+        }
+
+        private readonly bool Equals(FRectangle other)
+        {
+            return Position.Equals(other.Position) && Size.Equals(other.Size);
+        }
     }
 }

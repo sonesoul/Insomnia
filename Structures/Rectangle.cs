@@ -1,4 +1,7 @@
-﻿namespace Insomnia.Structures
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Insomnia.Structures
 {
     public struct Rectangle(Point position, Point size)
     {
@@ -16,5 +19,27 @@
         {
             
         }
+
+        public readonly override bool Equals([NotNullWhen(true)] object obj)
+        {
+            if (obj is not Rectangle frect)
+            {
+                return false;
+            }
+
+            return Equals(frect);
+        }
+        public readonly override int GetHashCode()
+        {
+            return HashCode.Combine(Position.GetHashCode(), Size.GetHashCode());
+        }
+
+        private readonly bool Equals(Rectangle other)
+        {
+            return Position.Equals(other.Position) && Size.Equals(other.Size);
+        }
+        
+        public static bool operator ==(Rectangle left, Rectangle right) => left.Equals(right);
+        public static bool operator !=(Rectangle left, Rectangle right) => !(left == right);
     }
 }
