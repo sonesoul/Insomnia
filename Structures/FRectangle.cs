@@ -1,4 +1,4 @@
-﻿namespace Insomnia.DirectMedia.Structures
+﻿namespace Insomnia.Structures
 {
     public struct FRectangle(Vector2 position, Vector2 size)
     {

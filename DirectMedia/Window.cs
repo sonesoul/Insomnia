@@ -22,8 +22,8 @@ namespace Insomnia.DirectMedia
 
         public Window(string title, Point src, Point dst, WindowFlags flags)
         {
-            _src = new Rectangle(, src);
-            _dst = new Rectangle();
+            _src = new Rectangle(Point.Zero, src);
+            _dst = new Rectangle(Point.Zero, dst);
 
             InitWindow(title, flags);
             InitTexture(PixelFormat.ARGB64, TextureAccess.Target);

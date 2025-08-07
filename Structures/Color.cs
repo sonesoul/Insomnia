@@ -1,6 +1,6 @@
 ﻿using SDLColor = SDL3.SDL.Color;
 
-namespace Insomnia.DirectMedia.Structures
+namespace Insomnia.Structures
 {
     public struct Color(byte r, byte g, byte b, byte a)
     {
@@ -23,6 +23,6 @@ namespace Insomnia.DirectMedia.Structures
                 B = color.Blue,
                 A = color.Alpha
             };
-        };
+        }
     }
 }

@@ -1,11 +1,10 @@
-﻿global using Point = Insomnia.DirectMedia.Structures.Point;
-global using Vector2 = Insomnia.DirectMedia.Structures.Vector2;
-global using Rectangle = Insomnia.DirectMedia.Structures.Rectangle;
-global using FRectangle = Insomnia.DirectMedia.Structures.FRectangle;
-global using Color = Insomnia.DirectMedia.Structures.Color;
+﻿global using Point = Insomnia.Structures.Point;
+global using Vector2 = Insomnia.Structures.Vector2;
+global using Rectangle = Insomnia.Structures.Rectangle;
+global using FRectangle = Insomnia.Structures.FRectangle;
+global using Color = Insomnia.Structures.Color;
 
 using Insomnia.DirectMedia;
-using Insomnia.DirectMedia.Structures;
 using WindowFlags = SDL3.SDL.WindowFlags;
 
 namespace Insomnia

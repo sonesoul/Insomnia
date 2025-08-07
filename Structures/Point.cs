@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Insomnia.DirectMedia.Structures
+namespace Insomnia.Structures
 {
     public struct Point(int x, int y)
     {

@@ -1,4 +1,4 @@
-﻿namespace Insomnia.DirectMedia.Structures
+﻿namespace Insomnia.Structures
 {
     public struct Rectangle(Point position, Point size)
     {

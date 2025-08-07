@@ -1,6 +1,4 @@
-﻿using Insomnia.DirectMedia.Structures;
-
-namespace Insomnia.Assets
+﻿namespace Insomnia.Assets
 {
     public class Palette
     {
