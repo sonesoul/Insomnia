@@ -6,6 +6,8 @@ namespace Insomnia.DirectMedia
     public unsafe class Window : IDisposable
     {
         public bool IsVisible { get; private set; } = true;
+        public Color BackgroundColor { get; set; } = Color.White;
+        public byte FrameTimeMs { get; set; } = 16;
 
         public event Action Draw;
         public event Action<Event> Event;
@@ -26,7 +28,7 @@ namespace Insomnia.DirectMedia
             _dst = new Rectangle(Point.Zero, dst);
 
             InitWindow(title, flags);
-            InitTexture(PixelFormat.ARGB64, TextureAccess.Target);
+            InitTexture(PixelFormat.RGB24, TextureAccess.Target);
 
             SetRenderDrawColor(_renderer, 0, 0, 0, 255);
             SetTextureScaleMode(_texture, ScaleMode.Nearest);
@@ -48,17 +50,16 @@ namespace Insomnia.DirectMedia
                 return;
 
             SetTarget(_texture);
-            Clear(Color.White);
+            Clear(BackgroundColor);
 
             Draw?.Invoke();
 
             SetTarget(null);
-            Clear(Color.Black);
             
             RenderTexture(_renderer, _texture, IntPtr.Zero, IntPtr.Zero);
             RenderPresent(_renderer);
 
-            Delay(16);
+            Delay(FrameTimeMs);
         }
 
         public void Show() => ShowWindow(_handle);
