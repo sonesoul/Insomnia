@@ -3,17 +3,11 @@ using System.IO;
 
 namespace Insomnia.Assets
 {
-    public class Asset
+    public class Asset(string relativePath)
     {
-        public string AbsolutePath { get; set; }
-        public string RelativePath { get; private set; }
+        public string AbsolutePath { get; set; } = GetAbsolutePath(relativePath);
+        public string RelativePath { get; private set; } = relativePath;
         public static string ContentDirectory => Path.Combine(Environment.CurrentDirectory, "Content\\");
-
-        public Asset(string relativePath)
-        {
-            RelativePath = relativePath;
-            AbsolutePath = GetAbsolutePath(relativePath);
-        }
 
         public static string GetAbsolutePath(string relativePath) => Path.Combine(ContentDirectory, relativePath);
     }

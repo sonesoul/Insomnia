@@ -19,8 +19,8 @@
         public static Color Pink => Colors[14];
         public static Color Peach => Colors[15];
 
-        private static readonly Color[] Colors = new Color[]
-        {
+        private static readonly Color[] Colors =
+        [
             new(0, 0, 0),         // Black
             new(29, 43, 83),      // Dark Blue
             new(126, 37, 83),     // Dark Purple
@@ -37,6 +37,6 @@
             new(131, 118, 156),   // Indigo
             new(255, 119, 168),   // Pink
             new(255, 204, 170),   // Peach
-        };
+        ];
     }
 }
