@@ -5,7 +5,7 @@ namespace Insomnia.DirectMedia
 {
     public unsafe class Window : IDisposable
     {
-        public bool IsVisible { get; private set; } = true;
+        public Keycode ExitKey { get; set; } = Keycode.F1;
         public Color BackgroundColor { get; set; } = Color.White;
         public byte FrameTimeMs { get; set; } = 16;
 
@@ -38,7 +38,7 @@ namespace Insomnia.DirectMedia
         {
             PollEvent(out Event e);
 
-            if ((EventType)e.Type == EventType.Quit || e.Key.Key == Keycode.F1)
+            if (e.Key.Key == ExitKey)
             {
                 Dispose();
                 return;
