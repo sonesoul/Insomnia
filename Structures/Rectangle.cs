@@ -44,5 +44,16 @@ namespace Insomnia.Structures
         
         public static bool operator ==(Rectangle left, Rectangle right) => left.Equals(right);
         public static bool operator !=(Rectangle left, Rectangle right) => !(left == right);
+
+        public static implicit operator SDL3.SDL.Rect(Rectangle rect)
+        {
+            return new()
+            {
+                X = rect.X,
+                Y = rect.Y,
+                W = rect.Width,
+                H = rect.Height
+            };
+        }
     }
 }

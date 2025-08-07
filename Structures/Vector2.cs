@@ -43,5 +43,14 @@ namespace Insomnia.Structures
         public static Vector2 operator /(Vector2 a, Vector2 b) => new(a.X / b.X, a.Y / b.Y);
         public static bool operator ==(Vector2 a, Vector2 b) => a.Equals(b);
         public static bool operator !=(Vector2 a, Vector2 b) => !(a == b);
+
+        public static implicit operator SDL3.SDL.FPoint(Vector2 vector)
+        {
+            return new()
+            {
+                X = vector.X,
+                Y = vector.Y,
+            };
+        }
     }
 }

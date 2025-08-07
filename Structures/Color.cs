@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using SDLColor = SDL3.SDL.Color;
 
 namespace Insomnia.Structures
 {
@@ -42,7 +41,7 @@ namespace Insomnia.Structures
         public static bool operator ==(Color left, Color right) => left.Equals(right);
         public static bool operator !=(Color left, Color right) => !(left == right);
 
-        public static implicit operator SDLColor(Color color) 
+        public static implicit operator SDL3.SDL.Color(Color color) 
         {
             return new()
             {

@@ -40,6 +40,17 @@ namespace Insomnia.Structures
         }
 
         public static bool operator ==(FRectangle left, FRectangle right) => left.Equals(right); 
-        public static bool operator !=(FRectangle left, FRectangle right) => !(left == right); 
+        public static bool operator !=(FRectangle left, FRectangle right) => !(left == right);
+
+        public static implicit operator SDL3.SDL.FRect(FRectangle frect)
+        {
+            return new()
+            {
+                X = frect.X,
+                Y = frect.Y,
+                W = frect.Width, 
+                H = frect.Height
+            };
+        }
     }
 }
