@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Insomnia.Structures
 {
+    [DebuggerDisplay("{ToString()}")]
     public struct Rectangle(Point position, Point size)
     {
         public Point Position { readonly get => _pos; set => _pos = value; } 
@@ -20,6 +22,7 @@ namespace Insomnia.Structures
             
         }
 
+        public readonly override string ToString() => $"{Position} : {Width}x{Height}";
         public readonly override bool Equals([NotNullWhen(true)] object obj)
         {
             if (obj is not Rectangle frect)

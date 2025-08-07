@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Insomnia.Structures
 {
+    [DebuggerDisplay("{ToString()}")]
     public struct Vector2(float x, float y)
     {
         public float X { get; set; } = x;
@@ -20,13 +22,7 @@ namespace Insomnia.Structures
             y = Y;
         }
 
-        public static Vector2 operator +(Vector2 a, Vector2 b) => new(a.X + b.X, a.Y + b.Y);
-        public static Vector2 operator -(Vector2 a, Vector2 b) => new(a.X - b.X, a.Y - b.Y);
-        public static Vector2 operator *(Vector2 a, Vector2 b) => new(a.X * b.X, a.Y * b.Y);
-        public static Vector2 operator /(Vector2 a, Vector2 b) => new(a.X / b.X, a.Y / b.Y);
-        public static bool operator ==(Vector2 a, Vector2 b) => a.Equals(b);
-        public static bool operator !=(Vector2 a, Vector2 b) => !(a == b);
-
+        public readonly override string ToString() => $"X: {X} Y: {Y}";
         public readonly override bool Equals([NotNullWhen(true)] object obj)
         {
             if (obj is not Vector2 v)
@@ -40,5 +36,12 @@ namespace Insomnia.Structures
         {
             return X == other.X && Y == other.Y;
         }
+
+        public static Vector2 operator +(Vector2 a, Vector2 b) => new(a.X + b.X, a.Y + b.Y);
+        public static Vector2 operator -(Vector2 a, Vector2 b) => new(a.X - b.X, a.Y - b.Y);
+        public static Vector2 operator *(Vector2 a, Vector2 b) => new(a.X * b.X, a.Y * b.Y);
+        public static Vector2 operator /(Vector2 a, Vector2 b) => new(a.X / b.X, a.Y / b.Y);
+        public static bool operator ==(Vector2 a, Vector2 b) => a.Equals(b);
+        public static bool operator !=(Vector2 a, Vector2 b) => !(a == b);
     }
 }

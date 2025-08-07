@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Insomnia.Structures
 {
+    [DebuggerDisplay("{ToString()}")]
     public struct FRectangle(Vector2 position, Vector2 size)
     {
         public Vector2 Position { readonly get => _pos; set => _pos = value; }
@@ -17,9 +19,7 @@ namespace Insomnia.Structures
 
         public FRectangle(float x, float y, float width, float height) : this(new(x, y), new(width, height)) { }
 
-        public static bool operator ==(FRectangle left, FRectangle right) => left.Equals(right); 
-        public static bool operator !=(FRectangle left, FRectangle right) => !(left == right); 
-        
+        public readonly override string ToString() => $"{Position} : {Width}x{Height}";
         public readonly override bool Equals([NotNullWhen(true)] object obj)
         {
             if (obj is not FRectangle frect)
@@ -38,5 +38,8 @@ namespace Insomnia.Structures
         {
             return Position.Equals(other.Position) && Size.Equals(other.Size);
         }
+
+        public static bool operator ==(FRectangle left, FRectangle right) => left.Equals(right); 
+        public static bool operator !=(FRectangle left, FRectangle right) => !(left == right); 
     }
 }
