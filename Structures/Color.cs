@@ -1,4 +1,6 @@
-﻿using SDLColor = SDL3.SDL.Color;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using SDLColor = SDL3.SDL.Color;
 
 namespace Insomnia.Structures
 {
@@ -24,5 +26,28 @@ namespace Insomnia.Structures
                 A = color.Alpha
             };
         }
+
+        public readonly override bool Equals([NotNullWhen(true)] object obj)
+        {
+            if (obj is not Color other)
+            {
+                return false;
+            }
+
+            return Equals(other);
+        }
+        public readonly override int GetHashCode() => HashCode.Combine(Red, Green, Blue, Alpha);
+
+        private readonly bool Equals(Color other)
+        {
+            return
+                Red == other.Red &&
+                Green == other.Green &&
+                Blue == other.Blue &&
+                Alpha == other.Alpha;
+        }
+
+        public static bool operator ==(Color left, Color right) => left.Equals(right);
+        public static bool operator !=(Color left, Color right) => !(left == right);
     }
 }
