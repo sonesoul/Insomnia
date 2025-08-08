@@ -25,8 +25,10 @@ namespace Insomnia
 
             while (!disposed)
             {
+                Window.PollEvents();
+                Window.Render();
+
                 AwakeKeeper.Update();
-                Window.Update();
             }
         }
     }

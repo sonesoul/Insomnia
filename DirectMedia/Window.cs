@@ -12,7 +12,6 @@ namespace Insomnia.DirectMedia
         public bool IsDisposed { get; private set; } = false;
 
         public event Action Draw;
-        public event Action DrawEnd;
         public event Action<Event> Event;
         public event Action Disposed;
 
@@ -37,15 +36,18 @@ namespace Insomnia.DirectMedia
             _texture.SetScaleMode(ScaleMode.Nearest);
         }
 
-        public void Update()
+        public void PollEvents()
         {
-            if (IsDisposed)
-                return;
-
-            CheckEvent();
-            Render();
-
-            Delay(FrameTimeMs);
+            while (PollEvent(out Event e))
+            {
+                if (e.Key.Key == ExitKey)
+                {
+                    Dispose();
+                    return;
+                }
+                
+                Event?.Invoke(e);
+            }
         }
 
         public void Show() => ShowWindow(_handle);
@@ -58,18 +60,15 @@ namespace Insomnia.DirectMedia
 
             IsDisposed = true;
 
-            DrawEnd += () =>
-            {
-                DestroyWindow(_handle);
-                DestroyTexture(_texture);
-                DestroyRenderer(_renderer);
+            DestroyWindow(_handle);
+            DestroyTexture(_texture);
+            DestroyRenderer(_renderer);
 
-                GC.SuppressFinalize(this);
-                Disposed?.Invoke();
-            };
+            GC.SuppressFinalize(this);
+            Disposed?.Invoke();
         }
 
-        private void Render()
+        public void Render()
         {
             _renderer.SetTarget(_texture);
             _renderer.Clear(BackgroundColor);
@@ -80,17 +79,8 @@ namespace Insomnia.DirectMedia
 
             _renderer.RenderTexture(_texture, _src, _dst);
             _renderer.EndRender();
-        }
-        private void CheckEvent()
-        {
-            PollEvent(out Event e);
 
-            if (e.Key.Key == ExitKey)
-            {
-                Dispose();
-            }
-
-            Event?.Invoke(e);
+            Delay(FrameTimeMs);
         }
     }
 }
