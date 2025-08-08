@@ -16,6 +16,9 @@ namespace Insomnia
         
         public const string Name = "Insomnia";
 
+        public const int FPS = 60;
+        public const int FrameTime = 1000 / FPS;
+
         private static void Main()
         {
             bool disposed = false;
@@ -27,6 +30,7 @@ namespace Insomnia
             {
                 Window.PollEvents();
                 Window.Render();
+                Window.Delay(FrameTime);
 
                 AwakeKeeper.Update();
             }

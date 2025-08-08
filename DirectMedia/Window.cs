@@ -7,7 +7,6 @@ namespace Insomnia.DirectMedia
     {
         public Keycode ExitKey { get; set; } = Keycode.F1;
         public Color BackgroundColor { get; set; } = Color.White;
-        public byte FrameTimeMs { get; set; } = 16;
 
         public bool IsDisposed { get; private set; } = false;
 
@@ -36,19 +35,6 @@ namespace Insomnia.DirectMedia
             _texture.SetScaleMode(ScaleMode.Nearest);
         }
 
-        public void Render()
-        {
-            _renderer.SetTarget(_texture);
-            _renderer.Clear(BackgroundColor);
-
-            Draw?.Invoke();
-            
-            _renderer.UnsetTarget();
-
-            ProjectTexture();
-            
-            Delay(FrameTimeMs);
-        }
         public void PollEvents()
         {
             while (PollEvent(out Event e))
@@ -62,6 +48,19 @@ namespace Insomnia.DirectMedia
                 Event?.Invoke(e);
             }
         }
+        public void Render()
+        {
+            _renderer.SetTarget(_texture);
+            _renderer.Clear(BackgroundColor);
+
+            Draw?.Invoke();
+            
+            _renderer.UnsetTarget();
+
+            Present();
+        }
+        
+        public void Delay(uint ms) => SDL3.SDL.Delay(ms);
 
         public void Show() => ShowWindow(_handle);
         public void Hide() => HideWindow(_handle);
@@ -81,7 +80,7 @@ namespace Insomnia.DirectMedia
             Disposed?.Invoke();
         }
 
-        private void ProjectTexture()
+        private void Present()
         {
             fixed (Rectangle* src = &_src)
             {
@@ -91,7 +90,7 @@ namespace Insomnia.DirectMedia
                 }
             }
 
-            _renderer.EndRender();
+            RenderPresent(_renderer);
         }
     }
 }

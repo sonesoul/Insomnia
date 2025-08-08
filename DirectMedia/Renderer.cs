@@ -12,8 +12,6 @@ namespace Insomnia.DirectMedia
 
         private Color _color;
 
-        public void EndRender() => RenderPresent(this);
-
         public void SetColor(Color c)
         {
             SetRenderDrawColor(
