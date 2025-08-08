@@ -36,6 +36,20 @@ namespace Insomnia.DirectMedia
             _texture.SetScaleMode(ScaleMode.Nearest);
         }
 
+        public void Render()
+        {
+            _renderer.SetTarget(_texture);
+            _renderer.Clear(BackgroundColor);
+
+            Draw?.Invoke();
+
+            _renderer.UnsetTarget();
+
+            RenderTexture(_renderer, _texture, IntPtr.Zero, IntPtr.Zero);
+            _renderer.EndRender();
+
+            Delay(FrameTimeMs);
+        }
         public void PollEvents()
         {
             while (PollEvent(out Event e))
@@ -66,21 +80,6 @@ namespace Insomnia.DirectMedia
 
             GC.SuppressFinalize(this);
             Disposed?.Invoke();
-        }
-
-        public void Render()
-        {
-            _renderer.SetTarget(_texture);
-            _renderer.Clear(BackgroundColor);
-
-            Draw?.Invoke();
-
-            _renderer.UnsetTarget();
-
-            _renderer.RenderTexture(_texture, _src, _dst);
-            _renderer.EndRender();
-
-            Delay(FrameTimeMs);
         }
     }
 }
