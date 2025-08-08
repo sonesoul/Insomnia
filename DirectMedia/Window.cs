@@ -3,7 +3,7 @@ using static SDL3.SDL;
 
 namespace Insomnia.DirectMedia
 {
-    public class Window : IDisposable
+    public unsafe class Window : IDisposable
     {
         public Keycode ExitKey { get; set; } = Keycode.F1;
         public Color BackgroundColor { get; set; } = Color.White;
@@ -42,12 +42,11 @@ namespace Insomnia.DirectMedia
             _renderer.Clear(BackgroundColor);
 
             Draw?.Invoke();
-
+            
             _renderer.UnsetTarget();
 
-            RenderTexture(_renderer, _texture, IntPtr.Zero, IntPtr.Zero);
-            _renderer.EndRender();
-
+            ProjectTexture();
+            
             Delay(FrameTimeMs);
         }
         public void PollEvents()
@@ -80,6 +79,19 @@ namespace Insomnia.DirectMedia
 
             GC.SuppressFinalize(this);
             Disposed?.Invoke();
+        }
+
+        private void ProjectTexture()
+        {
+            fixed (Rectangle* src = &_src)
+            {
+                fixed (Rectangle* dst = &_dst)
+                {
+                    RenderTexture(_renderer, _texture, new IntPtr(&src), new IntPtr(&dst));
+                }
+            }
+
+            _renderer.EndRender();
         }
     }
 }
