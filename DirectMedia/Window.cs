@@ -3,61 +3,47 @@ using static SDL3.SDL;
 
 namespace Insomnia.DirectMedia
 {
-    public unsafe class Window : IDisposable
+    public class Window : IDisposable
     {
         public Keycode ExitKey { get; set; } = Keycode.F1;
         public Color BackgroundColor { get; set; } = Color.White;
         public byte FrameTimeMs { get; set; } = 16;
 
+        public bool IsDisposed { get; private set; } = false;
+
         public event Action Draw;
+        public event Action DrawEnd;
         public event Action<Event> Event;
         public event Action Disposed;
 
         private IntPtr _handle;
-        private IntPtr _renderer;
-        private IntPtr _texture;
+
+        private Renderer _renderer;
+        private Texture _texture;
 
         private Rectangle _src;
         private Rectangle _dst;
-
-        private bool _disposed = false;
 
         public Window(string title, Point src, Point dst, WindowFlags flags)
         {
             _src = new Rectangle(Point.Zero, src);
             _dst = new Rectangle(Point.Zero, dst);
 
-            InitWindow(title, flags);
-            InitTexture(PixelFormat.RGB24, TextureAccess.Target);
+            _handle = CreateWindow(title, dst.X, dst.Y, flags);
+            _renderer = new(_handle);
+            _texture = new(_renderer, src, PixelFormat.RGB24, TextureAccess.Target);
 
-            SetRenderDrawColor(_renderer, 0, 0, 0, 255);
-            SetTextureScaleMode(_texture, ScaleMode.Nearest);
+            _renderer.SetColor(Color.Black);
+            _texture.SetScaleMode(ScaleMode.Nearest);
         }
 
         public void Update()
         {
-            PollEvent(out Event e);
-
-            if (e.Key.Key == ExitKey)
-            {
-                Dispose();
-                return;
-            }
-
-            Event?.Invoke(e);
-
-            if (_disposed)
+            if (IsDisposed)
                 return;
 
-            SetTarget(_texture);
-            Clear(BackgroundColor);
-
-            Draw?.Invoke();
-
-            SetTarget(null);
-            
-            RenderTexture(_renderer, _texture, IntPtr.Zero, IntPtr.Zero);
-            RenderPresent(_renderer);
+            CheckEvent();
+            Render();
 
             Delay(FrameTimeMs);
         }
@@ -65,44 +51,46 @@ namespace Insomnia.DirectMedia
         public void Show() => ShowWindow(_handle);
         public void Hide() => HideWindow(_handle);
 
-        public void SetColor(Color c)
-        {
-            SetRenderDrawColor(_renderer, c.Red, c.Green, c.Blue, c.Alpha);
-        }
-        public void SetTarget(IntPtr? renderTarget)
-        {
-            SetRenderTarget(_renderer, renderTarget ?? IntPtr.Zero);
-        }
-        public void Clear(Color color)
-        {
-            SetColor(color);
-            RenderClear(_renderer);
-        }
-       
         public void Dispose()
         {
-            if (_disposed)
+            if (IsDisposed)
                 return;
 
-            _disposed = true;
+            IsDisposed = true;
 
-            DestroyWindow(_handle);
-            GC.SuppressFinalize(this);
-            Disposed?.Invoke();
+            DrawEnd += () =>
+            {
+                DestroyWindow(_handle);
+                DestroyTexture(_texture);
+                DestroyRenderer(_renderer);
+
+                GC.SuppressFinalize(this);
+                Disposed?.Invoke();
+            };
         }
 
-        private void InitWindow(string title, WindowFlags flags)
+        private void Render()
         {
-            _dst.Size.Deconstruct(out int w, out int h);
+            _renderer.SetTarget(_texture);
+            _renderer.Clear(BackgroundColor);
 
-            _handle = CreateWindow(title, w, h, flags);
-            _renderer = CreateRenderer(_handle, null);
+            Draw?.Invoke();
+
+            _renderer.UnsetTarget();
+
+            _renderer.RenderTexture(_texture, _src, _dst);
+            _renderer.EndRender();
         }
-        private void InitTexture(PixelFormat format, TextureAccess access)
+        private void CheckEvent()
         {
-            _src.Size.Deconstruct(out int w, out int h);
-            
-            _texture = CreateTexture(_renderer, format, access, w, h);
+            PollEvent(out Event e);
+
+            if (e.Key.Key == ExitKey)
+            {
+                Dispose();
+            }
+
+            Event?.Invoke(e);
         }
     }
 }
