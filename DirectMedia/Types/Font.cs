@@ -1,19 +1,28 @@
-﻿using System;
+﻿using SDL3;
 
 namespace Insomnia.DirectMedia.Types
 {
     public class Font : Resource
     {
-        public int Height => SDL3.TTF.GetFontHeight(this);
+        public Point CharSize { get; }
+
+        public const string CharMeasurer = "0";
 
         public Font(string path, float size)
         {
-            Pointer = SDL3.TTF.OpenFont(path, size);
+            Pointer = TTF.OpenFont(path, size);
+            CharSize = MeasureString(CharMeasurer);
         }
 
         protected override void Destroy()
         {
-            SDL3.TTF.CloseFont(this);
+            TTF.CloseFont(this);
+        }
+
+        public Point MeasureString(string text)
+        {
+            TTF.GetStringSize(this, text, 0, out int x, out int y);
+            return new Point(x, y) / 2; //idk why results are twice bigger, and dividing by two makes it pixel-perfect
         }
     }
 }
