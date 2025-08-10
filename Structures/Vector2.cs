@@ -41,6 +41,10 @@ namespace Insomnia.Structures
         public static Vector2 operator -(Vector2 a, Vector2 b) => new(a.X - b.X, a.Y - b.Y);
         public static Vector2 operator *(Vector2 a, Vector2 b) => new(a.X * b.X, a.Y * b.Y);
         public static Vector2 operator /(Vector2 a, Vector2 b) => new(a.X / b.X, a.Y / b.Y);
+
+        public static Vector2 operator *(Vector2 a, float b) => new(a.X * b, a.Y * b);
+        public static Vector2 operator /(Vector2 a, float b) => new(a.X / b, a.Y / b);
+
         public static bool operator ==(Vector2 a, Vector2 b) => a.Equals(b);
         public static bool operator !=(Vector2 a, Vector2 b) => !(a == b);
 
