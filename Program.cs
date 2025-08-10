@@ -22,6 +22,7 @@ namespace Insomnia
         private static void Main()
         {
             bool disposed = false;
+            SDL3.TTF.Init();
 
             Window = new(Name, new Point(128, 128), new Point(384, 384), WindowFlags.OpenGL);
             Window.Disposed += () => disposed = true;

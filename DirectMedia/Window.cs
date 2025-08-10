@@ -7,7 +7,7 @@ namespace Insomnia.DirectMedia
     public unsafe class Window : IDisposable
     {
         public Keycode ExitKey { get; set; } = Keycode.F1;
-        public Color BackgroundColor { get; set; } = Color.White;
+        public Color BackgroundColor { get; set; } = Color.Black;
 
         public bool IsDisposed { get; private set; } = false;
 
@@ -83,19 +83,7 @@ namespace Insomnia.DirectMedia
 
         private void Present()
         {
-            FRect src = new()
-            {
-                W = _src.Width, 
-                H = _src.Height,
-            };
-
-            FRect dst = new()
-            {
-                W = _dst.Width,
-                H = _dst.Height,
-            };
-
-            RenderTexture(_renderer, _texture, src, dst);
+            RenderTexture(_renderer, _texture, _src, _dst);
             RenderPresent(_renderer);
         }
     }
