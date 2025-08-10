@@ -2,15 +2,18 @@
 using SDL3;
 using static SDL3.SDL;
 
-namespace Insomnia.DirectMedia
+namespace Insomnia.DirectMedia.Types
 {
-    public class Renderer(IntPtr handle) : IDisposable
+    public class Renderer : Resource
     {
-        public IntPtr Pointer { get; } = CreateRenderer(handle, null);
         public Color Color => _color;
-        public bool IsDisposed { get; private set; } = false;
-
+        
         private Color _color;
+
+        public Renderer(IntPtr handle)
+        {
+            Pointer = CreateRenderer(handle, null);
+        }
 
         public void SetColor(Color c)
         {
@@ -40,17 +43,9 @@ namespace Insomnia.DirectMedia
             SetTarget(IntPtr.Zero);
         }
 
-        public void Dispose()
+        protected override void Destroy()
         {
-            if (IsDisposed) 
-                return;
-
-            IsDisposed = true;
-             
             DestroyRenderer(this);
-            GC.SuppressFinalize(this);
         }
-
-        public static implicit operator IntPtr(Renderer r) => r.Pointer;
     }
 }

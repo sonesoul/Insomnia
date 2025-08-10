@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Insomnia.DirectMedia.Types;
+using System;
 using static SDL3.SDL;
 
 namespace Insomnia.DirectMedia
@@ -10,7 +11,7 @@ namespace Insomnia.DirectMedia
 
         public bool IsDisposed { get; private set; } = false;
 
-        public event Action Draw;
+        public event Action<Renderer> Draw;
         public event Action<Event> Event;
         public event Action Disposed;
 
@@ -53,7 +54,7 @@ namespace Insomnia.DirectMedia
             _renderer.SetTarget(_texture);
             _renderer.Clear(BackgroundColor);
 
-            Draw?.Invoke();
+            Draw?.Invoke(_renderer);
             
             _renderer.UnsetTarget();
 
@@ -82,14 +83,19 @@ namespace Insomnia.DirectMedia
 
         private void Present()
         {
-            fixed (Rectangle* src = &_src)
+            FRect src = new()
             {
-                fixed (Rectangle* dst = &_dst)
-                {
-                    RenderTexture(_renderer, _texture, new IntPtr(&src), new IntPtr(&dst));
-                }
-            }
+                W = _src.Width, 
+                H = _src.Height,
+            };
 
+            FRect dst = new()
+            {
+                W = _dst.Width,
+                H = _dst.Height,
+            };
+
+            RenderTexture(_renderer, _texture, src, dst);
             RenderPresent(_renderer);
         }
     }
