@@ -52,5 +52,16 @@ namespace Insomnia.Structures
                 H = frect.Height
             };
         }
+        public static implicit operator SDL3.SDL.Rect(FRectangle rect)
+        {
+            return new()
+            {
+                X = (int)rect.X,
+                Y = (int)rect.Y,
+                W = (int)rect.Width,
+                H = (int)rect.Height
+            };
+        }
+
     }
 }
