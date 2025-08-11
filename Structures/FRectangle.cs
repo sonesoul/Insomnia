@@ -19,6 +19,16 @@ namespace Insomnia.Structures
 
         public FRectangle(float x, float y, float width, float height) : this(new(x, y), new(width, height)) { }
 
+        public readonly bool Contains(Vector2 point) => Contains(point.X, point.Y);
+        public readonly bool Contains(float x, float y)
+        {
+            return
+                x >= X &&
+                x < X + Width &&
+                y >= Y &&
+                y < Y + Height;
+        }
+
         public readonly override string ToString() => $"{Position} : {Width}x{Height}";
         public readonly override bool Equals([NotNullWhen(true)] object obj)
         {

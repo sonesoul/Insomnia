@@ -22,6 +22,16 @@ namespace Insomnia.Structures
             
         }
 
+        public readonly bool Contains(Point point) => Contains(point.X, point.Y);
+        public readonly bool Contains(int x, int y)
+        {
+            return
+                x >= X &&
+                x < X + Width &&
+                y >= Y &&
+                y < Y + Height;
+        }
+
         public readonly override string ToString() => $"{Position} : {Width}x{Height}";
         public readonly override bool Equals([NotNullWhen(true)] object obj)
         {
