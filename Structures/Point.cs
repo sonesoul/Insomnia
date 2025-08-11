@@ -16,6 +16,8 @@ namespace Insomnia.Structures
 
         public Point(int both) : this(both, both) { }
 
+        public readonly Vector2 ToVector2() => new(X, Y);
+
         public readonly void Deconstruct(out int x, out int y)
         {
             x = X;
