@@ -1,5 +1,4 @@
 ﻿using System;
-using SDL3;
 using static SDL3.SDL;
 
 namespace Insomnia.DirectMedia.Types
@@ -23,6 +22,11 @@ namespace Insomnia.DirectMedia.Types
         public void SetScaleMode(ScaleMode mode)
         {
             SetTextureScaleMode(this, mode);
+        }
+
+        public void SetColor(Color c)
+        {
+            SetTextureColorMod(this, c.Red, c.Green, c.Blue);
         }
 
         protected override void Destroy()
