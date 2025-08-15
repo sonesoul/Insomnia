@@ -1,6 +1,5 @@
 ﻿using Insomnia.DirectMedia;
 using System;
-using System.Xml.Linq;
 using static SDL3.SDL;
 
 namespace Insomnia.View.Windows
@@ -27,11 +26,6 @@ namespace Insomnia.View.Windows
             if (e.Type == (uint)EventType.WindowCloseRequested)
             {
                 Window.IsVisible = false;
-            }
-
-            if (e.Type == (uint)EventType.MouseMotion)
-            {
-                Console.WriteLine("Mouse moved");
             }
         }
     }
