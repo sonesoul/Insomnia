@@ -7,8 +7,10 @@ namespace Insomnia.View.Windows
     {
         public Window Window { get; private set; }
 
-        public Point Destination { get; } = new(130, 70);
+        public ElementManager ElementManager { get; }
+
         public Point Source { get; } = new Point(65, 35);
+        public Point Destination { get; } = new(130, 70);
 
         private static WindowFlags Flags { get; } =
             WindowFlags.OpenGL |
@@ -20,12 +22,14 @@ namespace Insomnia.View.Windows
             WindowFlags.Hidden;
 
         public const string Name = "";
-
+        
         public TrayMenuWindow() 
         {
             Window = new(Name, Source, Destination, Flags);
             Window.BackgroundColor = Assets.Palette.LightGray;
             Window.Event += OnEvent;
+
+            ElementManager = new(Window);
         }
 
         public void Show()
