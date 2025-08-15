@@ -16,7 +16,7 @@ namespace Insomnia.View.Windows
             Window.Event += OnEvent;
         }
 
-        private void OnEvent(Event e)
+        private void OnEvent(in Event e)
         {
             if (e.Key.Key == Keycode.F2)
             {
