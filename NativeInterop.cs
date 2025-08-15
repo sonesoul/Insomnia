@@ -36,20 +36,14 @@ namespace Insomnia
             public IntPtr dwExtraInfo;
         }
 
-        public const int SW_HIDE = 0;
-        public const int SW_SHOW = 5;
-        public const int SW_RESTORE = 9;
-
-        public const uint INPUT_MOUSE = 0;
-        public const uint MOUSEEVENTF_MOVE = 0x0001;
-
         [DllImport("user32.dll")]
         private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
-        [DllImport("user32.dll")]
-        private static unsafe extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         [DllImport("user32.dll", SetLastError = true)]
         private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
+        public const uint INPUT_MOUSE = 0;
+        public const uint MOUSEEVENTF_MOVE = 0x0001;
+        
         public static TimeSpan GetIdleTime()
         {
             LASTINPUTINFO info = new();
@@ -59,7 +53,6 @@ namespace Insomnia
             uint idleTicks = ((uint)Environment.TickCount - info.dwTime);
             return TimeSpan.FromMilliseconds(idleTicks);
         }
-
         public static void MoveMouseBy(int deltaX, int deltaY)
         {
             INPUT input = new()

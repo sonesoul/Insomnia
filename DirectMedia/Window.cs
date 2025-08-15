@@ -1,71 +1,134 @@
 ﻿using Insomnia.DirectMedia.Types;
 using System;
+using System.Collections.Generic;
 using static SDL3.SDL;
 
 namespace Insomnia.DirectMedia
 {
-    public unsafe class Window : IDisposable
+    public class Window : IDisposable
     {
-        public Keycode ExitKey { get; set; } = Keycode.F1;
+        private static class WindowRegistry 
+        {
+            private static List<Window> Instances { get; } = [];
+            private static Dictionary<uint, Queue<Event>> Infos { get; } = [];
+
+            public static void Register(Window window) 
+            {
+                Instances.Add(window);
+                Infos.Add(window.ID, []);
+            }
+            public static void Unregister(Window window)
+            {
+                Instances.Remove(window);
+                Infos.Remove(window.ID);
+            }
+
+            public static void PollEvents()
+            {
+                while (PollEvent(out Event e))
+                {
+                    if (e.Key.Key == ExitKey)
+                    {
+                        for (int i = Instances.Count - 1; i >= 0; i--)
+                        {
+                            Instances[i].Dispose();
+                        }
+
+                        return;
+                    }
+
+                    if (Infos.TryGetValue(e.Window.WindowID, out Queue<Event> queue))
+                    {
+                        queue.Enqueue(e);
+                    }
+                }
+            }
+
+            public static Queue<Event> RetrieveEvents(uint id) => Infos[id];
+            public static IReadOnlyList<Window> GetInstances() => Instances;
+
+        }
+        public static Keycode ExitKey { get; set; } = Keycode.F1;
+
+        public Renderer Renderer { get; }
+        public Texture Texture { get; }
+
+        public Rectangle Source { get; set; }
+        public Rectangle Destination { get; set; }
+
+        public Point Position
+        {
+            get
+            {
+                GetWindowPosition(Handle, out int x, out int y);
+                return new(x, y);
+            }
+            set => SetWindowPosition(Handle, value.X, value.Y);
+        }
+
         public Color BackgroundColor { get; set; } = Color.Black;
-
         public bool IsDisposed { get; private set; } = false;
+        public bool IsVisible 
+        {
+            get => !GetWindowFlags(Handle).HasFlag(WindowFlags.Hidden);
+            set
+            {
+                if (value)
+                {
+                    ShowWindow(Handle);
+                }
+                else
+                {
+                    HideWindow(Handle);
+                }
+            }
+        }
 
-        public event Action<Renderer> Draw;
+        public IntPtr Handle { get; }
+        public uint ID { get; }
+
         public event Action<Event> Event;
+        public event Action<Renderer> Draw;
         public event Action Disposed;
-
-        private IntPtr _handle;
-
-        private Renderer _renderer;
-        private Texture _texture;
-
-        private Rectangle _src;
-        private Rectangle _dst;
 
         public Window(string title, Point src, Point dst, WindowFlags flags)
         {
-            _src = new Rectangle(Point.Zero, src);
-            _dst = new Rectangle(Point.Zero, dst);
+            Source = new Rectangle(Point.Zero, src);
+            Destination = new Rectangle(Point.Zero, dst);
 
-            _handle = CreateWindow(title, dst.X, dst.Y, flags);
-            _renderer = new(_handle);
-            _texture = new(_renderer, src, PixelFormat.RGB24, TextureAccess.Target);
+            Handle = CreateWindow(title, dst.X, dst.Y, flags);
+            ID = GetWindowID(Handle);
 
-            _renderer.SetColor(Color.Black);
-            _texture.SetScaleMode(ScaleMode.Nearest);
+            Renderer = new(Handle);
+            Texture = new(Renderer, src, PixelFormat.RGB24, TextureAccess.Target);
+
+            Renderer.SetColor(Color.Black);
+            Texture.SetScaleMode(ScaleMode.Nearest);
+
+            WindowRegistry.Register(this);
         }
 
-        public void PollEvents()
+        public void HandleEvents()
         {
-            while (PollEvent(out Event e))
-            {
-                if (e.Key.Key == ExitKey)
-                {
-                    Dispose();
-                    return;
-                }
-                
+            Queue<Event> events = WindowRegistry.RetrieveEvents(ID);
+
+            while (events.TryDequeue(out Event e)) 
+            { 
                 Event?.Invoke(e);
             }
         }
         public void Render()
         {
-            _renderer.SetTarget(_texture);
-            _renderer.Clear(BackgroundColor);
+            Renderer.SetTarget(Texture);
+            Renderer.Clear(BackgroundColor);
 
-            Draw?.Invoke(_renderer);
-            
-            _renderer.UnsetTarget();
+            Draw?.Invoke(Renderer);
 
-            Present();
-        }
-        
-        public void Delay(uint ms) => SDL3.SDL.Delay(ms);
+            Renderer.UnsetTarget();
 
-        public void Show() => ShowWindow(_handle);
-        public void Hide() => HideWindow(_handle);
-
+            RenderTexture(Renderer, Texture, Source, Destination);
+            RenderPresent(Renderer);
+        }        
         public void Dispose()
         {
             if (IsDisposed)
@@ -73,18 +136,18 @@ namespace Insomnia.DirectMedia
 
             IsDisposed = true;
 
-            DestroyWindow(_handle);
-            DestroyTexture(_texture);
-            DestroyRenderer(_renderer);
+            DestroyWindow(Handle);
+            DestroyTexture(Texture);
+            DestroyRenderer(Renderer);
+
+            WindowRegistry.Unregister(this);
 
             GC.SuppressFinalize(this);
             Disposed?.Invoke();
         }
-
-        private void Present()
-        {
-            RenderTexture(_renderer, _texture, _src, _dst);
-            RenderPresent(_renderer);
-        }
+        
+        public static void Delay(uint ms) => SDL3.SDL.Delay(ms);
+        public static void PollEvents() => WindowRegistry.PollEvents();
+        public static IReadOnlyList<Window> GetInstances() => WindowRegistry.GetInstances();
     }
 }
