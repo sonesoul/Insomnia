@@ -1,5 +1,4 @@
 ﻿using Insomnia.DirectMedia;
-using System;
 using static SDL3.SDL;
 
 namespace Insomnia.View.Windows
@@ -18,11 +17,6 @@ namespace Insomnia.View.Windows
 
         private void OnEvent(in Event e)
         {
-            if (e.Key.Key == Keycode.F2)
-            {
-                Program.TrayMenu.Show();
-            }
-
             if (e.Type == (uint)EventType.WindowCloseRequested)
             {
                 Window.IsVisible = false;
