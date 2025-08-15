@@ -8,7 +8,7 @@ namespace Insomnia.View
     public class ElementManager
     {
         public Window Window { get; }
-        private List<WindowElement> Items { get; } = [];
+        private List<Element> Items { get; } = [];
 
         public ElementManager(Window window)
         {
@@ -26,7 +26,7 @@ namespace Insomnia.View
             }
         }
 
-        private void OnEvent(Event e)
+        private void OnEvent(in Event e)
         {
             for (int i = Items.Count - 1; i >= 0; i--)
             {
@@ -34,7 +34,13 @@ namespace Insomnia.View
             }
         }
 
-        public void Add(WindowElement item) => Items.Insert(0, item);
-        public void Remove(WindowElement item) => Items.Remove(item);
+        public void Add(Element item)
+        {
+            Items.Insert(0, item);
+        }
+        public void Remove(Element item)
+        {
+            Items.Remove(item);
+        }
     }
 }

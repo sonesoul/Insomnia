@@ -36,7 +36,7 @@ namespace Insomnia.View.Windows
         }
         public void Hide() => Window.IsVisible = false;
 
-        private void OnEvent(Event e)
+        private void OnEvent(in Event e)
         {
             if (e.Type == (uint)EventType.WindowFocusLost)
             {

@@ -9,8 +9,6 @@ using Insomnia.DirectMedia;
 using Insomnia.View.Windows;
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using WindowFlags = SDL3.SDL.WindowFlags;
 
 namespace Insomnia
 {

@@ -4,6 +4,6 @@ namespace Insomnia.View
 {
     public interface IEventListener
     {
-        public abstract void OnEvent(Event e);
+        public abstract void OnEvent(in Event e);
     }
 }

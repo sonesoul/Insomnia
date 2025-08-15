@@ -7,6 +7,8 @@ namespace Insomnia.DirectMedia
 {
     public class Window : IDisposable
     {
+        public delegate void SDLEventHandler(in Event e);
+
         private static class WindowRegistry 
         {
             private static List<Window> Instances { get; } = [];
@@ -87,7 +89,7 @@ namespace Insomnia.DirectMedia
         public IntPtr Handle { get; }
         public uint ID { get; }
 
-        public event Action<Event> Event;
+        public event SDLEventHandler Event;
         public event Action<Renderer> Draw;
         public event Action Disposed;
 
