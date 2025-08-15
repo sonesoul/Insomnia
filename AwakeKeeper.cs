@@ -8,19 +8,28 @@ namespace Insomnia
         public int OffsetPx { get; set; } = 10; 
         public TimeSpan IdleThreshold { get; set; } = TimeSpan.FromSeconds(1);
         public float MoveDelaySeconds { get; set; } = 1f;
-        public bool Enabled { get; set; } = true;
+        public bool IsActive { get => _isActive; set => SetActive(value); } 
 
+        public event Action<bool> ActiveStateChanged; 
+       
         private bool _toggle = true;
-        
+        private bool _isActive = true;
+
         public void Update()
         {
-            if (!Enabled)
+            if (!IsActive)
                 return;
 
             if (NativeInterop.GetIdleTime() >= IdleThreshold)
             {
                 NativeInterop.MoveMouseBy((_toggle = !_toggle) ? -OffsetPx : OffsetPx, 0);
             }
+        }
+
+        private void SetActive(bool isActive)
+        {
+            _isActive = isActive;
+            ActiveStateChanged?.Invoke(isActive);
         }
     }
 }
