@@ -16,7 +16,7 @@ namespace Insomnia
 {
     internal class Program
     {
-        public static Window Window { get; private set; }
+        public static MainWindow MainWindow { get; private set; }
         public static TrayMenuWindow TrayMenu { get; private set; }
         public static AwakeKeeper AwakeKeeper { get; private set; } = new();
         public static bool IsWorking { get; set; } = true;
@@ -32,21 +32,8 @@ namespace Insomnia
         {
             SDL3.TTF.Init();
 
-            Window = new(Name, new Point(128, 128), new Point(384, 384), WindowFlags.OpenGL);
+            MainWindow = new();
             TrayMenu = new();
-            
-            Window.Event += e =>
-            {
-                if (e.Key.Key == SDL3.SDL.Keycode.F2)
-                {
-                    TrayMenu.Show();
-                }
-
-                if (e.Type == (int)SDL3.SDL.EventType.WindowCloseRequested)
-                {
-                    
-                }
-            };
 
             while (Instances.Count > 0)
             {
