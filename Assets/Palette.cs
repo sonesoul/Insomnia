@@ -2,25 +2,27 @@
 {
     public class Palette
     {
-        public static Color Black => Colors[0];
-        public static Color DarkBlue => Colors[1];
-        public static Color DarkPurple => Colors[2];
-        public static Color DarkGreen => Colors[3];
-        public static Color Brown => Colors[4];
-        public static Color DarkGray => Colors[5];
-        public static Color LightGray => Colors[6];
-        public static Color White => Colors[7];
-        public static Color Red => Colors[8];
-        public static Color Orange => Colors[9];
-        public static Color Yellow => Colors[10];
-        public static Color Green => Colors[11];
-        public static Color Blue => Colors[12];
-        public static Color Indigo => Colors[13];
-        public static Color Pink => Colors[14];
-        public static Color Peach => Colors[15];
+        public static Color Transparent => Colors[0];
+        public static Color Black => Colors[1];
+        public static Color DarkBlue => Colors[2];
+        public static Color DarkPurple => Colors[3];
+        public static Color DarkGreen => Colors[4];
+        public static Color Brown => Colors[5];
+        public static Color DarkGray => Colors[6];
+        public static Color LightGray => Colors[7];
+        public static Color White => Colors[8];
+        public static Color Red => Colors[9];
+        public static Color Orange => Colors[10];
+        public static Color Yellow => Colors[11];
+        public static Color Green => Colors[12];
+        public static Color Blue => Colors[13];
+        public static Color Indigo => Colors[14];
+        public static Color Pink => Colors[15];
+        public static Color Peach => Colors[16];
 
         private static readonly Color[] Colors =
         [
+            new(0, 0, 0, 0),      // Transparent
             new(0, 0, 0),         // Black
             new(29, 43, 83),      // Dark Blue
             new(126, 37, 83),     // Dark Purple
