@@ -12,7 +12,10 @@ namespace Insomnia.DirectMedia
             Vector2 mousePos = Position;
             Vector2 windowPos = window.Position.ToVector2();
 
-            return mousePos - windowPos;
+            Vector2 source = window.Source.Size.ToVector2();
+            Vector2 destination = window.Destination.Size.ToVector2();
+
+            return (mousePos - windowPos) / (destination / source);
         }
 
         private static (MouseButtonFlags flags, Vector2 position) GetGlobalState()
