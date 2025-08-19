@@ -8,7 +8,7 @@ namespace Insomnia.View
     public class ElementManager
     {
         public Window Window { get; }
-        private List<Element> Items { get; } = [];
+        public List<Element> Items { get; } = [];
 
         public ElementManager(Window window)
         {

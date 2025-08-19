@@ -1,5 +1,12 @@
 ﻿using Insomnia.DirectMedia;
+using Insomnia.DirectMedia.Types;
+using Insomnia.View.Elements;
+
 using static SDL3.SDL;
+using Palette = Insomnia.Assets.Palette;
+using Fonts = Insomnia.Assets.Fonts;
+using System.Collections.Generic;
+using Insomnia.View.TrayButtons;
 
 namespace Insomnia.View.Windows
 {
@@ -9,8 +16,10 @@ namespace Insomnia.View.Windows
 
         public ElementManager ElementManager { get; }
 
-        public Point Source { get; } = new Point(65, 35);
-        public Point Destination { get; } = new(130, 70);
+        public Point Source { get; } = new Point(56, 35);
+        public Point Destination { get; } = new(112, 70);
+
+        public List<ITrayButton> Buttons { get; } = [];
 
         private static WindowFlags Flags { get; } =
             WindowFlags.OpenGL |
@@ -30,6 +39,8 @@ namespace Insomnia.View.Windows
             Window.Event += OnEvent;
 
             ElementManager = new(Window);
+
+            InitButtons();
         }
 
         public void Show()
@@ -61,6 +72,66 @@ namespace Insomnia.View.Windows
                 position.Y > center.Y ? Destination.Y : 0);
             
             return position;
+        }
+
+        private void InitButtons()
+        {
+            int yPos = 1;
+
+            Button insomniaButton = CreateButton("Insomnia", ref yPos);
+            Button toggleButton = CreateButton(Program.AwakeKeeper.IsActive ? "Disable" : "Enable", ref yPos);
+            Button quitButton = CreateButton("Quit", ref yPos);
+
+            Buttons.AddRange(
+                new WindowVisibilityButton(insomniaButton),
+                new KeeperToggleButton(toggleButton, Program.AwakeKeeper), 
+                new QuitButton(quitButton));
+
+            ElementManager.AddRange(
+                insomniaButton, 
+                toggleButton, 
+                quitButton);
+        }
+
+        private Button CreateButton(string text, ref int y)
+        {
+            int height = 11;
+
+            Font font = Fonts.Pico8Mono;
+            Label label = new(Window);
+            label.CreateTexture(text, font, Palette.Black);
+            label.Position = new(9, y + 3);
+
+            Button button = new(label)
+            {
+                Position = new(1, y),
+                Size = new(54, height),
+                BackgroundColor = Palette.Black
+            };
+
+            y += height;
+
+            void SetSelected()
+            {
+                label.CreateTexture(label.Text, font, Palette.White);
+                button.IsBackVisible = true;
+            }
+            void SetUnselected()
+            {
+                label.CreateTexture(label.Text, font, Palette.Black);
+                button.IsBackVisible = false;
+            }
+
+            button.MouseEnter += SetSelected;
+            button.MouseExit += SetUnselected;
+
+            button.MouseClick += () =>
+            {
+                Hide();
+                SetUnselected();
+            };
+            
+            return button;
         }
     }
 }

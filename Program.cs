@@ -26,6 +26,8 @@ namespace Insomnia
         public const int FPS = 60;
         public const int FrameTime = 1000 / FPS;
 
+        private static bool _shouldExit = false;
+
         private static IReadOnlyList<Window> Instances { get; } = Window.GetInstances();
 
         private static void Main()
@@ -34,7 +36,7 @@ namespace Insomnia
 
             InitializeComponents();
 
-            while (Instances.Count > 0)
+            while (!_shouldExit && Instances.Count > 0)
             {
                 AwakeKeeper.Update();
 
@@ -44,7 +46,11 @@ namespace Insomnia
                 IterateInstances(w => w.HandleEvents());
                 IterateInstances(w => w.Render());
             }
+
+            TrayIcon.Hide();
         }
+
+        public static void Quit() => _shouldExit = true;
 
         private static void InitializeComponents()
         {
@@ -54,7 +60,6 @@ namespace Insomnia
             
             TrayIcon = new(AwakeKeeper);
         }
-
         private static void IterateInstances(Action<Window> action)
         {
             var instances = Instances;

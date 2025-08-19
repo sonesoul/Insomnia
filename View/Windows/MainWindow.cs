@@ -14,6 +14,11 @@ namespace Insomnia.View.Windows
 
         public const string Name = "Insomnia";
         
+        public void ToggleVisibility()
+        {
+            Window.IsVisible = !Window.IsVisible;
+        }
+
         public MainWindow()
         {
             Window = new(Name, Source, Destination, WindowFlags.OpenGL);
