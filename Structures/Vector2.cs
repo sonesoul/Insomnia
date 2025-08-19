@@ -24,6 +24,12 @@ namespace Insomnia.Structures
             y = Y;
         }
 
+        public static Vector2 Lerp(Vector2 start, Vector2 end, float t)
+        {
+            Vector2 dir = end - start;
+            return start + (dir * t);
+        }
+
         public readonly override string ToString() => $"X: {X} Y: {Y}";
         public readonly override bool Equals([NotNullWhen(true)] object obj)
         {
