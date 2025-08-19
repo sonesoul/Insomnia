@@ -38,6 +38,15 @@ namespace Insomnia.View
         {
             Items.Insert(0, item);
         }
+
+        public void AddRange(params Element[] elements)
+        {
+            for (int i = 0; i < elements.Length; i++)
+            {
+                Add(elements[i]);
+            }
+        }
+
         public void Remove(Element item)
         {
             Items.Remove(item);
