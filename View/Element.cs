@@ -7,7 +7,7 @@ namespace Insomnia.View
     public abstract class Element(Window window) : IDrawable, IEventListener
     {
         public Window Window { get; } = window;
-        public Point Position { get; set; } = Point.Zero;
+        public Vector2 Position { get; set; } = Vector2.Zero;
 
         public virtual void OnEvent(in Event e)
         {

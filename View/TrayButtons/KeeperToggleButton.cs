@@ -1,6 +1,4 @@
 ﻿using Insomnia.View.Elements;
-using Insomnia.DirectMedia;
-using Insomnia.DirectMedia.Types;
 
 namespace Insomnia.View.TrayButtons
 {
@@ -12,15 +10,12 @@ namespace Insomnia.View.TrayButtons
         public Button Button { get; private set; }
         private AwakeKeeper _awakeKeeper;
 
-        private Font Font => Button.Label.Font;
-        private Color Color => Button.Label.ForeColor;
-
         public KeeperToggleButton(Button button, AwakeKeeper awakeKeeper)
         {
             _awakeKeeper = awakeKeeper;
             Button = button;
 
-            RecreateLabel();
+            SetLabelText();
             button.MouseClick += OnButtonClick; 
         }
 
@@ -28,13 +23,11 @@ namespace Insomnia.View.TrayButtons
         {
             AwakeKeeper keeper = _awakeKeeper;
             keeper.IsActive = !keeper.IsActive;
-            RecreateLabel();
+            SetLabelText();
         }
-        private void RecreateLabel()
+        private void SetLabelText()
         {
-            string newText = _awakeKeeper.IsActive ? ActiveString : InactiveString;
-
-            Button.Label.CreateTexture(newText, Font, Color);
+            Button.Label.Text = _awakeKeeper.IsActive ? ActiveString : InactiveString;
         }
     }
 }

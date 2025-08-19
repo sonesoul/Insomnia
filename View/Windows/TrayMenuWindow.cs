@@ -98,8 +98,7 @@ namespace Insomnia.View.Windows
             int height = 11;
 
             Font font = Fonts.Pico8Mono;
-            Label label = new(Window);
-            label.CreateTexture(text, font, Palette.Black);
+            Label label = new(text, font, Palette.Black, Window);
             label.Position = new(9, y + 3);
 
             Button button = new(label)
@@ -113,12 +112,12 @@ namespace Insomnia.View.Windows
 
             void SetSelected()
             {
-                label.CreateTexture(label.Text, font, Palette.White);
+                label.Color = Palette.White;
                 button.IsBackVisible = true;
             }
             void SetUnselected()
             {
-                label.CreateTexture(label.Text, font, Palette.Black);
+                label.Color = Palette.Black;
                 button.IsBackVisible = false;
             }
 
