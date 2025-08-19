@@ -1,4 +1,5 @@
 ﻿using Insomnia.DirectMedia;
+using Insomnia.View.MainMenu;
 using static SDL3.SDL;
 
 namespace Insomnia.View.Windows
@@ -6,8 +7,7 @@ namespace Insomnia.View.Windows
     public class MainWindow
     {
         public Window Window { get; set; }
-
-        public ElementManager ElementManager { get; } 
+        public OptionsMenu Menu { get; set; }
 
         public Point Source { get; } = new Point(128);
         public Point Destination { get; } = new(384);
@@ -24,7 +24,7 @@ namespace Insomnia.View.Windows
             Window = new(Name, Source, Destination, WindowFlags.OpenGL);
             Window.Event += OnEvent;
 
-            ElementManager = new(Window);
+            Menu = new(Window);
         }
 
         private void OnEvent(in Event e)

@@ -1,4 +1,6 @@
-﻿namespace Insomnia.Coroutines
+﻿using System;
+
+namespace Insomnia.Coroutines
 {
     public static class Time
     {
@@ -8,7 +10,7 @@
         public static void Update()
         {
             ulong currentTicks = Now();
-            Delta = (currentTicks - LastTicks)/ 1000;
+            Delta = (currentTicks - LastTicks) / 1000f;
             LastTicks = currentTicks;
         }
 

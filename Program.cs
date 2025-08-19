@@ -11,7 +11,7 @@ using Insomnia.View.Windows;
 using System;
 using System.Collections.Generic;
 using Insomnia.Coroutines;
-
+    
 namespace Insomnia
 {
     internal class Program
@@ -34,7 +34,7 @@ namespace Insomnia
         private static void Main()
         {
             SDL3.TTF.Init();
-
+            
             InitializeComponents();
 
             while (!_shouldExit && Instances.Count > 0)
