@@ -10,6 +10,7 @@ using Insomnia.View;
 using Insomnia.View.Windows;
 using System;
 using System.Collections.Generic;
+using Insomnia.Coroutines;
 
 namespace Insomnia
 {
@@ -39,12 +40,18 @@ namespace Insomnia
             while (!_shouldExit && Instances.Count > 0)
             {
                 AwakeKeeper.Update();
+                Time.Update();
+                StepTask.Manager.Update();
 
-                Window.Delay(FrameTime);
                 Window.PollEvents();
 
                 IterateInstances(w => w.HandleEvents());
                 IterateInstances(w => w.Render());
+
+                uint frameDuration = (uint)(Time.Now() - Time.LastTicks);
+
+                if (frameDuration < FrameTime)
+                    Window.Delay(FrameTime - frameDuration);
             }
 
             TrayIcon.Hide();
