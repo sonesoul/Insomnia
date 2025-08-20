@@ -1,6 +1,6 @@
 ﻿using Insomnia.DirectMedia.Types;
 
-namespace Insomnia.View.Elements
+namespace Insomnia.View
 {
     public interface IDrawable
     {

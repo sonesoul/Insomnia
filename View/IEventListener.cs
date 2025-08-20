@@ -1,6 +1,6 @@
 ﻿using static SDL3.SDL;
 
-namespace Insomnia.View.Elements
+namespace Insomnia.View
 {
     public interface IEventListener
     {
