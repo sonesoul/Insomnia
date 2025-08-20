@@ -7,12 +7,11 @@ namespace Insomnia.View.Elements
 {
     public class Label : Element
     {
-        public float Scale { get; } = 1f;
-
         public string Text { get => _text; set => CreateTexture(value, Font); } 
         public Font Font { get => _font; set => CreateTexture(Text, value); } 
         public Color Color { get => _color; set => Texture?.SetColor(value); }
-        public Point Size { get; private set; }
+
+        public ref FRectangle Bounds => ref _bounds;
 
         public Texture Texture { get; private set; } 
 
@@ -32,15 +31,25 @@ namespace Insomnia.View.Elements
 
         public override void Draw(Renderer renderer)
         {
-            SDL.FRect dst = new()
-            {
-                X = (int)Position.X, 
-                Y = (int)Position.Y, 
-                W = Size.X * Scale, 
-                H = Size.Y * Scale, 
-            };
+            SDL.FRect dst = _bounds;
+            dst.X = (int)_bounds.X;
+            dst.Y = (int)_bounds.Y;
+            
             SDL.RenderTexture(renderer, Texture, IntPtr.Zero, dst);
         }
+        public void Draw(Point position, Renderer renderer)
+        {
+            SDL.FRect dst = new()
+            {
+                X = position.X,
+                Y = position.Y,
+                W = _bounds.Width, 
+                H = _bounds.Height,
+            };
+
+            SDL.RenderTexture(renderer, Texture, IntPtr.Zero, dst);
+        }
+
 
         public void CreateTexture(string text, Font font)
         {
@@ -50,7 +59,7 @@ namespace Insomnia.View.Elements
             IntPtr surface = TTF.RenderTextSolid(Font, Text, 0, Color.White);
 
             Texture = new Texture(Window.Renderer, surface);
-            Size = Font.MeasureString(Text);
+            _bounds.Size = Font.MeasureString(Text).ToVector2();
             SetColor(_color);
         }
 

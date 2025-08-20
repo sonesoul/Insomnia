@@ -1,35 +1,36 @@
-﻿using Insomnia.DirectMedia;
+﻿using Insomnia.Assets;
+using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
 using SDL3;
 using System;
 
 namespace Insomnia.View.Elements
 {
-    public class Button(Label label) : Element(label.Window)
+    public class Button : Element
     {
-        public new Point Position { get => _bounds.Position; set => _bounds.Position = value; }
-        public Point Size { get => _bounds.Size; set => _bounds.Size = value; }
-        
-        public Label Label { get; set; } = label;
-
-        public Color BackgroundColor { get; set; } = Assets.Palette.Transparent;
-
-        public bool IsBackVisible { get; set; } = false;
+        public ButtonRenderer Renderer { get; set; }
+        public ref FRectangle Bounds => ref _bounds;
 
         public event Action MouseEnter;
-        public event Action MouseExit;
-
+        public event Action MouseLeave;
         public event Action MouseClick;
 
         private bool _containsMouse = false;
 
-        private Rectangle _bounds;
+        public Button(Window window) : base(window)
+        {
+            Renderer = new("Button", Fonts.Pico8Mono, this);
+        }
+        public Button(string text, Font font, Window window) : base(window)
+        {
+            Renderer = new(text, font, this);
+        }
 
         public override void OnEvent(in SDL.Event e)
         {
             if (e.Type == (uint)SDL.EventType.MouseMotion)
             {
-                CheckMouseInBounds();
+                CheckContainsMouse();
             }
 
             if (e.Button.Button == (uint)SDL.MouseButtonFlags.Left && e.Button.Down)
@@ -38,28 +39,25 @@ namespace Insomnia.View.Elements
                     MouseClick?.Invoke();
             }
         }
-
         public override void Draw(Renderer renderer)
         {
-            if (IsBackVisible)
-                SDL.RenderFillRect(renderer, _bounds);
-            
-            Label.Draw(renderer);
+            Renderer?.Draw(renderer);
         }
 
-        private void CheckMouseInBounds()
+        private void CheckContainsMouse()
         {
-            bool mouseInBounds = _bounds.Contains(Mouse.GetRelativePosition(Window).ToPoint());
+            Vector2 pos = Mouse.GetRelativePosition(Window);
+            bool mouseInBounds = _bounds.Contains((int)pos.X, (int)pos.Y);
 
-            if (mouseInBounds && !_containsMouse)
+            if (!_containsMouse && mouseInBounds)
             {
-                MouseEnter?.Invoke();
                 _containsMouse = true;
+                MouseEnter?.Invoke();
             }
-            else if (!mouseInBounds && _containsMouse)
+            else if (_containsMouse && !mouseInBounds)
             {
-                MouseExit?.Invoke();
                 _containsMouse = false;
+                MouseLeave?.Invoke();
             }
         }
     }

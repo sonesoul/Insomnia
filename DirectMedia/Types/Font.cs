@@ -22,7 +22,7 @@ namespace Insomnia.DirectMedia.Types
         public Point MeasureString(string text)
         {
             TTF.GetStringSize(this, text, 0, out int x, out int y);
-            return new Point(x, y) / 2; //idk why results are twice bigger, and dividing by two makes it pixel-perfect
+            return new Structures.Point(x, y) / 2; //idk why results are twice bigger, and dividing by two makes it pixel-perfect
         }
     }
 }

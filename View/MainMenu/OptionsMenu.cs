@@ -12,11 +12,14 @@ namespace Insomnia.View.MainMenu
         public List<MenuItem> Items { get; } = [];
 
         public int Index { get; private set; } = -1;
+        public MenuItem CurrentItem => Items[Index];
 
-        public Point StartPosition { get; } = new(5, 0);
+        public Point StartPosition { get; } = new(5, 10);
         public int YOffset { get; } = 7;
 
         private Label ArrowLabel { get; }
+
+        private Label DescriptionLabel { get; set; } 
 
         public OptionsMenu(Window window)
         {
@@ -24,6 +27,7 @@ namespace Insomnia.View.MainMenu
             Window.Event += OnEvent;
             Window.Draw += Draw;
 
+            DescriptionLabel = new("", Fonts.Pico8Mono, Palette.LightGray, Window);
             ArrowLabel = new(">", Fonts.Pico8Mono, Palette.White, Window);
             
             AddItem("State");
@@ -55,6 +59,11 @@ namespace Insomnia.View.MainMenu
             {
                 Select(Index + 1);
             }
+
+            if (e.Key.Key == SDL3.SDL.Keycode.Return && e.Key.Down)
+            {
+                Enter();
+            }
         }
 
         public void Select(int index)
@@ -67,12 +76,13 @@ namespace Insomnia.View.MainMenu
             if (index != Index)
             {
                 if (Index >= 0 && index < Items.Count)
-                    Items[Index].Deselect();
+                    CurrentItem.Deselect();
                 
                 Index = index;
                 Items[Index].Select();
             }
         }
+        public void Enter() => CurrentItem.Enter();
 
         public void AddItem(string text)
         {

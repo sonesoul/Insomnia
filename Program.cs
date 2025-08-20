@@ -6,18 +6,18 @@ global using Rectangle = Insomnia.Structures.Rectangle;
 global using Vector2 = Insomnia.Structures.Vector2;
 
 using Insomnia.DirectMedia;
-using Insomnia.View;
-using Insomnia.View.Windows;
 using System;
 using System.Collections.Generic;
 using Insomnia.Coroutines;
-    
+using Insomnia.View.Tray;
+using Insomnia.Windows;
+
 namespace Insomnia
 {
     internal class Program
     {
         public static MainWindow MainWindow { get; private set; }
-        public static TrayMenuWindow TrayWindow { get; private set; }
+        public static TrayWindow TrayWindow { get; private set; }
         public static TrayIcon TrayIcon { get; private set; }
         public static AwakeKeeper AwakeKeeper { get; private set; } 
         public static bool IsWorking { get; set; } = true;

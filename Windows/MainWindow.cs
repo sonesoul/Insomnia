@@ -2,14 +2,14 @@
 using Insomnia.View.MainMenu;
 using static SDL3.SDL;
 
-namespace Insomnia.View.Windows
+namespace Insomnia.Windows
 {
     public class MainWindow
     {
         public Window Window { get; set; }
         public OptionsMenu Menu { get; set; }
 
-        public Point Source { get; } = new Point(128);
+        public Point Source { get; } = new Structures.Point(128);
         public Point Destination { get; } = new(384);
 
         public const string Name = "Insomnia";
