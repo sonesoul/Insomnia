@@ -12,13 +12,18 @@ namespace Insomnia.View.MainMenu
         public Vector2 Position { get; set; } = new(0, 10);
         public int ItemHeight { get; } = 7;
 
+        public Point CharSize { get; }
+
         private List<Option> Options => Menu.Options;
         private Label _arrowLabel;
 
         public MenuRenderer(OptionsMenu menu)
         {
+            Font font = Fonts.Pico8Mono;
+            CharSize = font.CharSize;
+
             Menu = menu;
-            _arrowLabel = new(">", Fonts.Pico8Mono, menu.Window);
+            _arrowLabel = new(">", font, menu.Window);
             menu.Window.Draw += Draw;
         }
 
@@ -28,8 +33,12 @@ namespace Insomnia.View.MainMenu
             
             for (int i = 0; i < Options.Count; i++)
             {
+                Vector2 position = new(
+                        Position.X + CharSize.X, 
+                        Position.Y + (ItemHeight * i));
+
                 var item = Options[i].Renderer;
-                item.Draw(renderer);
+                item.Draw(renderer, position);
             }
         }
     }

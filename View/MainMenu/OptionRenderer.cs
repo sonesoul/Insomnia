@@ -34,14 +34,14 @@ namespace Insomnia.View.MainMenu
             OnDeactivated();
         }
 
-        public void Draw(Renderer renderer)
+        public void Draw(Renderer renderer, Vector2 position)
         {
             bool entered = Option.State == OptionState.Entered;
 
             if (entered)
-                Value?.Renderer?.Draw(renderer);
+                Value?.Renderer?.Draw(renderer, position);
 
-            _label.Draw((Option.Position + CurrentOffset).ToPoint(), renderer); 
+            _label.Draw((position + CurrentOffset).ToPoint(), renderer); 
         }
 
         private void OnActivated()

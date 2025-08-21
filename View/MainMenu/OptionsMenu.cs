@@ -1,7 +1,4 @@
-﻿using Insomnia.Assets;
-using Insomnia.DirectMedia;
-using Insomnia.DirectMedia.Types;
-using Insomnia.View.Elements;
+﻿using Insomnia.DirectMedia;
 using System;
 using System.Collections.Generic;
 using Event = SDL3.SDL.Event;
@@ -16,8 +13,6 @@ namespace Insomnia.View.MainMenu
 
         public int Index { get; private set; } = -1;
         public Option Item => Options[Index];
-
-        public Point Position { get; } = new(5, 10);
 
         public Keycode UpKey { get; } = Keycode.Up;
         public Keycode DownKey { get; } = Keycode.Down;
@@ -165,9 +160,7 @@ namespace Insomnia.View.MainMenu
 
         private void AddOption(string text)
         {
-            Vector2 position = new(Position.X, Position.Y + (7 * Options.Count));
-
-            Option item = new(position);
+            Option item = new();
             item.Renderer = new(text, item, Window);
 
             Options.Add(item);

@@ -9,11 +9,9 @@ namespace Insomnia.View.MainMenu
         Entered,
     }
 
-    public class Option(Vector2 position)
+    public class Option
     {
-        public Vector2 Position { get; set; } = position;
         public OptionValue Value { get; set; }
-
         public OptionRenderer Renderer { get; set; }
 
         public bool IsActive { get => _isActive; set => SetIsActive(value); }

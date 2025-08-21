@@ -2,6 +2,7 @@
 using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
 using Insomnia.View.Elements;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace Insomnia.View.MainMenu
 {
@@ -26,9 +27,14 @@ namespace Insomnia.View.MainMenu
             SetLabel(value.IsOn);
         }
 
-        public override void Draw(Renderer renderer)
+        public override void Draw(Renderer renderer, Vector2 position)
         {
-            _label.Draw(_position, renderer);
+            int x = (int)position.X + (Size.X / 2) - (int)(_label.Size.X / 2);
+            int y = (int)position.Y;
+
+            Point pos = new(x, y);
+
+            _label.Draw(pos, renderer);
         }
 
         private void SetLabel(bool isOn)
@@ -36,12 +42,12 @@ namespace Insomnia.View.MainMenu
             _label.Text = isOn ? "On" : "Off";
             _label.Color = isOn ? Palette.Green : Palette.Red;
 
-            Point optionPos = Value.Option.Position.ToPoint();
+            /*Point optionPos = Value.Option.Position.ToPoint();
 
             int x = optionPos.X + (Size.X / 2) - (int)(_label.Size.X / 2);
             int y = optionPos.Y;
 
-            _position = new Point(x, y);
+            _position = new Point(x, y);*/
         }
     }
 }
