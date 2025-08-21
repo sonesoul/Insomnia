@@ -5,7 +5,7 @@ using Insomnia.View.Elements;
 
 namespace Insomnia.View.MainMenu
 {
-    public class OnOffRenderer : OptionValueRenderer
+    public class OnOffRenderer : ValueRenderer
     {
         public OnOffValue Value { get; }
 

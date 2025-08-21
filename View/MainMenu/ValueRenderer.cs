@@ -3,7 +3,7 @@ using Insomnia.DirectMedia.Types;
 
 namespace Insomnia.View.MainMenu
 {
-    public abstract class OptionValueRenderer(Window window) : IDrawable
+    public abstract class ValueRenderer(Window window) : IDrawable
     {
         public virtual Point Size { get; protected set; }
         public Window Window { get; protected set; } = window;

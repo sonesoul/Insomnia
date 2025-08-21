@@ -173,7 +173,6 @@ namespace Insomnia.View.MainMenu
                     option.IsActive = false;
                     _deactivatedOptions.Add(option);
                 }
-
             }
         }
 

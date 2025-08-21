@@ -5,7 +5,7 @@ namespace Insomnia.View.MainMenu
     public abstract class OptionValue(Option option)
     {
         public Option Option { get; } = option;
-        public OptionValueRenderer Renderer { get; set; }
+        public ValueRenderer Renderer { get; set; }
 
         public void RetakeUpDown(out Action up, out Action down)
         {
