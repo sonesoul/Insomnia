@@ -12,15 +12,17 @@ namespace Insomnia.View.MainMenu
     public class OptionsMenu
     {
         public Window Window { get; }
-        public List<Option> Items { get; } = [];
+        public List<Option> Options { get; } = [];
 
         public int Index { get; private set; } = -1;
-        public Option Item => Items[Index];
+        public Option Item => Options[Index];
 
         public Point Position { get; } = new(5, 10);
 
         public Keycode UpKey { get; } = Keycode.Up;
         public Keycode DownKey { get; } = Keycode.Down;
+
+        public MenuRenderer Renderer { get; }
 
         private List<Keycode> EnterKeys { get; } = [Keycode.Right, Keycode.Return];
         private List<Keycode> ExitKeys { get; } = [Keycode.Left, Keycode.Escape];
@@ -28,47 +30,32 @@ namespace Insomnia.View.MainMenu
         private Action _upAction;
         private Action _downAction;
 
-        private readonly int _yOffset = 7;
-        private readonly Label _arrowLabel;
-
         private readonly List<Option> _deactivatedOptions = []; 
 
         public OptionsMenu(Window window)
         {
             Window = window;
             Window.Event += OnEvent;
-            Window.Draw += Draw;
 
             RestoreUpdown();
-
-            _arrowLabel = new(">", Fonts.Pico8Mono, Palette.White, Window);
 
             AddOption("State");
             AddOption("Delay");
             AddOption("Start");
             AddOption("Quit");
+            
+            Option option = Options[0];
+            OnOffValue value = new(Options[0], true);
 
-            OnOffValue value = new(Items[0], true);
-            OnOffRenderer renderer = new(Window, value);
-
-            Option option = Items[0];
-
+            value.Renderer = new OnOffRenderer(Window, value);
             option.Value = value;
             option.IsActive = true;
-            
+
             Select(0);
+
+            Renderer = new(this);
         }
 
-        private void Draw(Renderer renderer)
-        {
-            _arrowLabel.Position = new(Position.X - 4, Position.Y + _yOffset * Index);
-            _arrowLabel.Draw(renderer);
-
-            for (int i = 0; i < Items.Count; i++) 
-            {
-                Items[i].Renderer.Draw(renderer);
-            } 
-        }
         private void OnEvent(in Event e)
         {
             var key = e.Key;
@@ -103,8 +90,8 @@ namespace Insomnia.View.MainMenu
         public void Select(int index)
         {
             if (index < 0)
-                index = Items.Count - 1;
-            else if (index >= Items.Count)
+                index = Options.Count - 1;
+            else if (index >= Options.Count)
                 index = 0;
 
             if (index != Index)
@@ -113,7 +100,7 @@ namespace Insomnia.View.MainMenu
                     Item.Reset();
 
                 Index = index;
-                Items[Index].Select();
+                Options[Index].Select();
             }
         }
 
@@ -161,12 +148,12 @@ namespace Insomnia.View.MainMenu
         }
         private void DeactivateItems()
         {
-            for (int i = 0; i < Items.Count; i++)
+            for (int i = 0; i < Options.Count; i++)
             {
                 if (i == Index)
                     continue;
 
-                Option option = Items[i];
+                Option option = Options[i];
 
                 if (option.IsActive)
                 {
@@ -178,12 +165,12 @@ namespace Insomnia.View.MainMenu
 
         private void AddOption(string text)
         {
-            Vector2 position = new(Position.X, Position.Y + (_yOffset * Items.Count));
+            Vector2 position = new(Position.X, Position.Y + (7 * Options.Count));
 
             Option item = new(position);
             item.Renderer = new(text, item, Window);
 
-            Items.Add(item);
+            Options.Add(item);
         }
     }    
 }
