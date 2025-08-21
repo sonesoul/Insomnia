@@ -5,16 +5,22 @@ using Insomnia.View.Elements;
 
 namespace Insomnia.View.MainMenu
 {
-    public class OnOffRenderer : ValueRenderer
+    public class SwitchRenderer : ValueRenderer
     {
-        public OnOffValue Value { get; }
+        public SwitchValue Value { get; }
 
         private readonly Label _label;
 
-        public OnOffRenderer(Window window, OnOffValue value) : base(window)
+        public string PositiveString { get; set; }
+        public string NegativeString { get; set; }
+
+        public SwitchRenderer(string positive, string negative, Window window, SwitchValue value) : base(window)
         {
+            PositiveString = positive;
+            NegativeString = negative;
+
             Value = value;
-            
+
             value.TurnedOn += () => SetLabel(isOn: true);
             value.TurnedOff += () => SetLabel(isOn: false);
 
@@ -37,7 +43,7 @@ namespace Insomnia.View.MainMenu
 
         private void SetLabel(bool isOn)
         {
-            _label.Text = isOn ? "On" : "Off";
+            _label.Text = isOn ? PositiveString : NegativeString;
             _label.Color = isOn ? Palette.Green : Palette.Red;
         }
     }

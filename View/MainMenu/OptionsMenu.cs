@@ -40,9 +40,9 @@ namespace Insomnia.View.MainMenu
             AddOption("Quit");
             
             Option option = Options[0];
-            OnOffValue value = new(Options[0], true);
+            SwitchValue value = new(Options[0], true);
 
-            value.Renderer = new OnOffRenderer(Window, value);
+            value.Renderer = new SwitchRenderer("Yes", "No", Window, value);
             option.Value = value;
             option.IsActive = true;
 

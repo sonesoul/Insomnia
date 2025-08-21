@@ -15,7 +15,7 @@ namespace Insomnia.View.MainMenu
         public Point CharSize { get; }
 
         private List<Option> Options => Menu.Options;
-        private Label _arrowLabel;
+        private readonly Label _arrowLabel;
 
         public MenuRenderer(OptionsMenu menu)
         {
