@@ -9,10 +9,12 @@ namespace Insomnia.View.MainMenu
         Entered,
     }
 
-    public class Option
+    public class Option(string name)
     {
         public OptionValue Value { get; set; }
         public OptionRenderer Renderer { get; set; }
+
+        public string Name { get; } = name;
 
         public bool IsActive { get => _isActive; set => SetIsActive(value); }
         public OptionState State { get => _state; set => SetState(value); }

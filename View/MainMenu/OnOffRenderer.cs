@@ -2,7 +2,6 @@
 using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
 using Insomnia.View.Elements;
-using static System.Windows.Forms.Design.AxImporter;
 
 namespace Insomnia.View.MainMenu
 {
@@ -11,7 +10,6 @@ namespace Insomnia.View.MainMenu
         public OnOffValue Value { get; }
 
         private readonly Label _label;
-        private Point _position;
 
         public OnOffRenderer(Window window, OnOffValue value) : base(window)
         {
@@ -41,13 +39,6 @@ namespace Insomnia.View.MainMenu
         {
             _label.Text = isOn ? "On" : "Off";
             _label.Color = isOn ? Palette.Green : Palette.Red;
-
-            /*Point optionPos = Value.Option.Position.ToPoint();
-
-            int x = optionPos.X + (Size.X / 2) - (int)(_label.Size.X / 2);
-            int y = optionPos.Y;
-
-            _position = new Point(x, y);*/
         }
     }
 }

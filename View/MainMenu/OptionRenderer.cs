@@ -20,11 +20,11 @@ namespace Insomnia.View.MainMenu
         private readonly Label _label;
         private OptionValue Value => Option.Value;
 
-        public OptionRenderer(string text, Option option, Window window)
+        public OptionRenderer(Option option, Window window)
         {
             Option = option;
 
-            _label = new(text, Fonts.Pico8Mono, Palette.LightGray, window);
+            _label = new(option.Name, Fonts.Pico8Mono, Palette.LightGray, window);
 
             Option.StateChanged += StateChanged;
 

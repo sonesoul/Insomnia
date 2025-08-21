@@ -160,8 +160,8 @@ namespace Insomnia.View.MainMenu
 
         private void AddOption(string text)
         {
-            Option item = new();
-            item.Renderer = new(text, item, Window);
+            Option item = new(text);
+            item.Renderer = new(item, Window);
 
             Options.Add(item);
         }
