@@ -5,10 +5,10 @@ using static SDL3.SDL;
 
 namespace Insomnia.DirectMedia
 {
-    public class Window : IDisposable
-    {
-        public delegate void SDLEventHandler(in Event e);
+    public delegate void WindowEventHandler(in Event e);
 
+    public class Window : IDisposable
+    {    
         private static class WindowRegistry 
         {
             private static List<Window> Instances { get; } = [];
@@ -89,7 +89,7 @@ namespace Insomnia.DirectMedia
         public IntPtr Handle { get; }
         public uint ID { get; }
 
-        public event SDLEventHandler Event;
+        public event WindowEventHandler Event;
         public event Action<Renderer> Draw;
         public event Action Disposed;
 
