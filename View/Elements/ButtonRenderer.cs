@@ -1,4 +1,5 @@
 ﻿using Insomnia.Assets;
+using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
 
 namespace Insomnia.View.Elements
