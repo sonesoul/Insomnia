@@ -9,10 +9,12 @@ namespace Insomnia.View.MainMenu
         public event Action TurnedOn;
         public event Action TurnedOff;
 
-        public override void Up() => Toggle();
-        public override void Down() => Toggle();
+        private bool _actualValue = value;
 
-        private void Toggle()
+        public override void Up() => Switch();
+        public override void Down() => Switch();
+
+        private void Switch()
         {
             IsOn = !IsOn;
 
@@ -20,6 +22,19 @@ namespace Insomnia.View.MainMenu
                 TurnedOn?.Invoke();
             else
                 TurnedOff?.Invoke();
+        }
+
+        public override void Apply()
+        {
+            _actualValue = IsOn;
+            base.Apply();
+        }
+        public override void Discard()
+        {
+            if (_actualValue != IsOn)
+                Switch();
+
+            base.Discard();
         }
     }
 }
