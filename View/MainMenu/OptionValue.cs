@@ -7,11 +7,11 @@ namespace Insomnia.View.MainMenu
         public Option Option { get; } = option;
         public ValueRenderer Renderer { get; set; }
 
-        public void RetakeUpDown(out Action up, out Action down)
-        {
-            up = Up;
-            down = Down;
-        }
+        public event Action Applied;
+        public event Action Discarded;
+
+        public virtual void Apply() => Applied?.Invoke();
+        public virtual void Discard() => Discarded?.Invoke();
 
         public abstract void Up();
         public abstract void Down();

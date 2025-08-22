@@ -6,6 +6,12 @@ using Keycode = SDL3.SDL.Keycode;
 
 namespace Insomnia.View.MainMenu
 {
+    enum MenuState
+    {
+        Selecting,
+        Editing, 
+    }
+
     public class OptionsMenu
     {
         public Window Window { get; }
@@ -18,21 +24,18 @@ namespace Insomnia.View.MainMenu
         public Keycode DownKey { get; } = Keycode.Down;
 
         public MenuRenderer Renderer { get; }
+        
+        private Dictionary<MenuState, Dictionary<Keycode, Action>> _bindings;
 
-        private List<Keycode> EnterKeys { get; } = [Keycode.Right, Keycode.Return];
-        private List<Keycode> ExitKeys { get; } = [Keycode.Left, Keycode.Escape];
-
-        private Action _upAction;
-        private Action _downAction;
-
+        private MenuState _state = MenuState.Selecting;
         private readonly List<Option> _deactivatedOptions = []; 
 
         public OptionsMenu(Window window)
         {
             Window = window;
             Window.Event += OnEvent;
-
-            RestoreUpdown();
+            
+            InitBindings();
 
             AddOption("State");
             AddOption("Delay");
@@ -59,26 +62,9 @@ namespace Insomnia.View.MainMenu
             if (!key.Down)
                 return;
 
-            if (EnterKeys.Contains(keycode))
+            if (_bindings[_state].TryGetValue(keycode, out Action action))
             {
-                Enter();
-                return;
-            }
-
-            if (ExitKeys.Contains(keycode))
-            {
-                Exit();
-                return;
-            }
-
-            if (keycode == DownKey)
-            {
-                _downAction();
-            }
-
-            if (keycode == UpKey)
-            {
-                _upAction();
+                action?.Invoke();
             }
         }
 
@@ -86,7 +72,8 @@ namespace Insomnia.View.MainMenu
         {
             if (index < 0)
                 index = Options.Count - 1;
-            else if (index >= Options.Count)
+            
+            if (index >= Options.Count)
                 index = 0;
 
             if (index != Index)
@@ -107,30 +94,22 @@ namespace Insomnia.View.MainMenu
             if (!Item.IsActive)
                 return;
 
-            if (Item.State == OptionState.Entered)
-            {
-                Exit();
-                return;
-            }
-
             Item.Enter();
-            Item.Value?.RetakeUpDown(out _upAction, out _downAction);
             DeactivateItems();
-        }
-        public void Exit()
-        {
-            if (Item.State != OptionState.Entered)
-                return;
 
+            _state = MenuState.Editing;
+        }
+        public void Exit(bool saveChanges)
+        {
             Item.Select();
-            RestoreUpdown();
             ActivateItems();
-        }
 
-        private void RestoreUpdown()
-        {
-            _upAction = Up;
-            _downAction = Down;
+            if (saveChanges)
+                Item.Value.Apply();
+            else
+                Item.Value.Discard();
+
+            _state = MenuState.Selecting;
         }
 
         private void ActivateItems()
@@ -164,6 +143,31 @@ namespace Insomnia.View.MainMenu
             item.Renderer = new(item, Window);
 
             Options.Add(item);
+        }
+
+        private void InitBindings()
+        {
+            Keycode enter = Keycode.Return;
+            Keycode escape = Keycode.Escape;
+            Keycode up = Keycode.Up;
+            Keycode down = Keycode.Down;
+
+            _bindings = new()
+            {
+                [MenuState.Selecting] = new()
+                {
+                    [up] = Up,
+                    [down] = Down,
+                    [enter] = Enter
+                },
+                [MenuState.Editing] = new()
+                {
+                    [up] = () => Item.Value?.Up(),   // если Value имеет Up/Down методы
+                    [down] = () => Item.Value?.Down(),
+                    [enter] = () => Exit(true),
+                    [escape] = () => Exit(false)
+                }
+            };
         }
     }    
 }
