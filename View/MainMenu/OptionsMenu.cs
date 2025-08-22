@@ -162,7 +162,7 @@ namespace Insomnia.View.MainMenu
                 },
                 [MenuState.Editing] = new()
                 {
-                    [up] = () => Item.Value?.Up(),   // если Value имеет Up/Down методы
+                    [up] = () => Item.Value?.Up(),
                     [down] = () => Item.Value?.Down(),
                     [enter] = () => Exit(true),
                     [escape] = () => Exit(false)
