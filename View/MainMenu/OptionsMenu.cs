@@ -115,6 +115,7 @@ namespace Insomnia.View.MainMenu
             ActivateItems();
 
             _state = MenuState.Selecting;
+            Item.Value.Discard();
             Exited?.Invoke();
         }
 
