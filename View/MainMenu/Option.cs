@@ -41,9 +41,6 @@ namespace Insomnia.View.MainMenu
         }
         private void SetIsActive(bool value)
         {
-            if (Value == null && value == true)
-                return;
-
             _isActive = value;
 
             if (_isActive)

@@ -6,7 +6,7 @@ using Keycode = SDL3.SDL.Keycode;
 
 namespace Insomnia.View.MainMenu
 {
-    enum MenuState
+    public enum MenuState
     {
         Selecting,
         Editing, 
@@ -30,9 +30,7 @@ namespace Insomnia.View.MainMenu
         public event Action ChangesApplied;
 
         private Dictionary<MenuState, Dictionary<Keycode, Action>> _bindings;
-
         private MenuState _state = MenuState.Selecting;
-        private readonly List<Option> _deactivatedOptions = []; 
 
         public OptionsMenu(Window window)
         {
@@ -104,18 +102,18 @@ namespace Insomnia.View.MainMenu
                 return;
 
             Item.Enter();
-            DeactivateItems();
-
             _state = MenuState.Editing;
+            SetItemsActive(false);
+
             Entered?.Invoke();
         }
         public void Exit()
         {
             Item.Select();
-            ActivateItems();
-
-            _state = MenuState.Selecting;
             Item.Value.Discard();
+            _state = MenuState.Selecting;
+            SetItemsActive(true);
+
             Exited?.Invoke();
         }
 
@@ -141,28 +139,14 @@ namespace Insomnia.View.MainMenu
             }
         }
 
-        private void ActivateItems()
-        {
-            for (int i = _deactivatedOptions.Count - 1; i >= 0; i--)
-            {
-                _deactivatedOptions[i].IsActive = true;
-                _deactivatedOptions.RemoveAt(i);
-            }
-        }
-        private void DeactivateItems()
+        private void SetItemsActive(bool enabled)
         {
             for (int i = 0; i < Options.Count; i++)
             {
                 if (i == Index)
                     continue;
 
-                Option option = Options[i];
-
-                if (option.IsActive)
-                {
-                    option.IsActive = false;
-                    _deactivatedOptions.Add(option);
-                }
+                Options[i].IsActive = enabled;
             }
         }
 
