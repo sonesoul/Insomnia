@@ -92,13 +92,5 @@ namespace Insomnia.View.MainMenu
                 return e + (Time.Delta / 0.2f);
             });
         }
-
-        private IEnumerator ChangeColor(Color color, float seconds)
-        {
-            Color temp = _label.Color;
-            _label.Color = color;
-            yield return StepTask.Yields.WaitForSeconds(seconds);
-            _label.Color = temp;
-        }
     }
 }

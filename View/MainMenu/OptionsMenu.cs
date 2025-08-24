@@ -18,16 +18,19 @@ namespace Insomnia.View.MainMenu
         public List<Option> Options { get; } = [];
 
         public int Index { get; private set; } = -1;
-        public Option Item => Options[Index];
+        public Option Option => Options[Index];
 
         public MenuRenderer Renderer { get; }
 
-        public event Action Selected;
-        public event Action Entered;
-        public event Action Exited;
+        public IControllable CurrentItem;
+
+        public event Action<Option> Selected;
+        public event Action<Option> Entered;
+        public event Action<Option> Exited;
 
         public event Action ValueChanged;
         public event Action ChangesApplied;
+        public event Action ChangesDiscarded;
 
         private Dictionary<MenuState, Dictionary<Keycode, Action>> _bindings;
         private MenuState _state = MenuState.Selecting;
@@ -39,15 +42,15 @@ namespace Insomnia.View.MainMenu
             
             InitBindings();
 
-            AddOption("State");
-            AddOption("Delay");
-            AddOption("Start");
-            AddOption("Quit");
+            AddOption("State", "Program working state");
+            AddOption("Delay", "Delay between moves");
+            AddOption("Start", "Start program with system");
+            AddOption("Quit", "Quit the program");
 
             Option option = Options[0];
             SwitchValue switchValue = new(true, option);
 
-            switchValue.Renderer = new SwitchRenderer("Yes", "No", switchValue, Window);
+            switchValue.Renderer = new SwitchRenderer("On", "Off", switchValue, Window);
             option.Value = switchValue;
 
             option = Options[1];
@@ -56,9 +59,9 @@ namespace Insomnia.View.MainMenu
             timeValue.Renderer = new TimeRollRenderer(timeValue, Window);
             option.Value = timeValue;
 
-            Select(0);
-
             Renderer = new(this);
+
+            Select(0);
         }
 
         private void OnEvent(in Event e)
@@ -86,11 +89,11 @@ namespace Insomnia.View.MainMenu
             if (index != Index)
             {
                 if (Index >= 0)
-                    Item.Reset();
+                    Option.Reset();
 
                 Index = index;
                 Options[Index].Select();
-                Selected?.Invoke();
+                Selected?.Invoke(Option);
             }
         }
 
@@ -99,28 +102,30 @@ namespace Insomnia.View.MainMenu
 
         public void Enter()
         {
-            if (!Item.IsActive)
+            if (!Option.IsActive)
                 return;
 
-            Item.Enter();
+            Option.Enter();
             _state = MenuState.Editing;
             SetItemsActive(false);
 
-            Entered?.Invoke();
+            Entered?.Invoke(Option);
         }
         public void Exit()
         {
-            Item.Select();
-            Item.Value.Discard();
+            Option.Value.Discard();
+            ChangesDiscarded?.Invoke();
+
+            Option.Select();
             _state = MenuState.Selecting;
             SetItemsActive(true);
 
-            Exited?.Invoke();
+            Exited?.Invoke(Option);
         }
 
         private void Apply()
         {
-            var value = Item.Value;
+            var value = Option.Value;
 
             if (value != null)
             {
@@ -131,7 +136,7 @@ namespace Insomnia.View.MainMenu
 
         private void ChangeValue(Action<OptionValue> valueAction)
         {
-            var value = Item.Value;
+            var value = Option.Value;
 
             if (value != null)
             {
@@ -151,9 +156,13 @@ namespace Insomnia.View.MainMenu
             }
         }
 
-        private void AddOption(string name)
+        private void AddOption(string name, string description)
         {
-            Option item = new(name);
+            Option item = new(name)
+            {
+                Description = description,
+            };
+
             item.Renderer = new(item, Window);
 
             Options.Add(item);
