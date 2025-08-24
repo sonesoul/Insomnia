@@ -15,7 +15,7 @@ namespace Insomnia.View.MainMenu
         public Vector2 SelectedOffset { get; set; } = new(5, 0);
         public Vector2 CurrentOffset { get; private set; } = Vector2.Zero;
 
-        private StepTask animation = null;
+        private StepTask _animation = null;
 
         private readonly Label _label;
         private OptionValue Value => Option.Value;
@@ -31,7 +31,10 @@ namespace Insomnia.View.MainMenu
             Option.Activated += OnActivated;
             Option.Deactivated += OnDeactivated;
 
-            OnDeactivated();
+            if (option.IsActive)
+                OnActivated();
+            else
+                OnDeactivated();
         }
 
         public void Draw(Renderer renderer, Vector2 position)
@@ -75,9 +78,10 @@ namespace Insomnia.View.MainMenu
 
         private void MoveLabel(Vector2 offset)
         {
-            animation?.Break();
-            animation = StepTask.Run(() => LerpOffset(offset));
+            _animation?.Break();
+            _animation = StepTask.Run(() => LerpOffset(offset));
         }
+        
         private IEnumerator LerpOffset(Vector2 end)
         {
             Vector2 start = CurrentOffset;
@@ -87,6 +91,14 @@ namespace Insomnia.View.MainMenu
                 CurrentOffset = Vector2.Lerp(start, end, (1 - MathF.Pow(1 - e, 2)));
                 return e + (Time.Delta / 0.2f);
             });
+        }
+
+        private IEnumerator ChangeColor(Color color, float seconds)
+        {
+            Color temp = _label.Color;
+            _label.Color = color;
+            yield return StepTask.Yields.WaitForSeconds(seconds);
+            _label.Color = temp;
         }
     }
 }

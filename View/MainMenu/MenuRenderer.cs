@@ -17,6 +17,8 @@ namespace Insomnia.View.MainMenu
         private List<Option> Options => Menu.Options;
         private readonly Label _arrowLabel;
 
+        private bool drawDraft = false;
+
         public MenuRenderer(OptionsMenu menu)
         {
             Font font = Fonts.Pico8Mono;
@@ -24,13 +26,27 @@ namespace Insomnia.View.MainMenu
 
             Menu = menu;
             _arrowLabel = new(">", font, menu.Window);
+
             menu.Window.Draw += Draw;
+            menu.ChangesApplied += () => drawDraft = false;
+            menu.ValueChanged += () => drawDraft = true;
+            menu.Exited += () => drawDraft = false;
         }
 
         private void Draw(Renderer renderer)
         {
-            _arrowLabel.Draw(new Point((int)Position.X, (int)Position.Y + ItemHeight * Menu.Index), renderer);
-            
+            Point pos = new((int)Position.X, (int)Position.Y + ItemHeight * Menu.Index);
+            _arrowLabel.Draw(pos, renderer);
+         
+            if (!drawDraft)
+            {
+                pos.X -= 1;
+                _arrowLabel.Draw(pos, renderer);
+                
+                pos.X -= 1;
+                _arrowLabel.Draw(pos, renderer);
+            }
+
             for (int i = 0; i < Options.Count; i++)
             {
                 Vector2 position = new(

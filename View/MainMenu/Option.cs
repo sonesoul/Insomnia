@@ -24,7 +24,7 @@ namespace Insomnia.View.MainMenu
 
         public event Action<OptionState> StateChanged;
 
-        private bool _isActive = false;
+        private bool _isActive = true;
         private OptionState _state = OptionState.Avaliable;
 
         public void Enter() => SetState(OptionState.Entered);

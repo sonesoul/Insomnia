@@ -7,28 +7,28 @@ namespace Insomnia.View.MainMenu
 {
     public class SwitchRenderer : ValueRenderer
     {
-        public SwitchValue Value { get; }
+        public SwitchValue OptionValue { get; }
 
         private readonly Label _label;
 
         public string PositiveString { get; set; }
         public string NegativeString { get; set; }
 
-        public SwitchRenderer(string positive, string negative, Window window, SwitchValue value) : base(window)
+        public SwitchRenderer(string positive, string negative, SwitchValue optionValue, Window window) : base(window)
         {
             PositiveString = positive;
             NegativeString = negative;
 
-            Value = value;
+            OptionValue = optionValue;
 
-            value.TurnedOn += () => SetLabel(isOn: true);
-            value.TurnedOff += () => SetLabel(isOn: false);
+            optionValue.TurnedOn += () => SetLabel(isOn: true);
+            optionValue.TurnedOff += () => SetLabel(isOn: false);
 
             _label = new(string.Empty, Fonts.Pico8Mono, window);
             Point charSize = Fonts.Pico8Mono.CharSize;
             Size = new Point(charSize.X * 4, charSize.Y);
 
-            SetLabel(value.IsOn);
+            SetLabel(optionValue.IsOn);
         }
 
         public override void Draw(Renderer renderer, Vector2 position)

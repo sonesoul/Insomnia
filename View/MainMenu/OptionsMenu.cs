@@ -20,11 +20,15 @@ namespace Insomnia.View.MainMenu
         public int Index { get; private set; } = -1;
         public Option Item => Options[Index];
 
-        public Keycode UpKey { get; } = Keycode.Up;
-        public Keycode DownKey { get; } = Keycode.Down;
-
         public MenuRenderer Renderer { get; }
-        
+
+        public event Action Selected;
+        public event Action Entered;
+        public event Action Exited;
+
+        public event Action ValueChanged;
+        public event Action ChangesApplied;
+
         private Dictionary<MenuState, Dictionary<Keycode, Action>> _bindings;
 
         private MenuState _state = MenuState.Selecting;
@@ -41,13 +45,18 @@ namespace Insomnia.View.MainMenu
             AddOption("Delay");
             AddOption("Start");
             AddOption("Quit");
-            
-            Option option = Options[0];
-            SwitchValue value = new(Options[0], true);
 
-            value.Renderer = new SwitchRenderer("Yes", "No", Window, value);
-            option.Value = value;
-            option.IsActive = true;
+            Option option = Options[0];
+            SwitchValue switchValue = new(option, true);
+
+            switchValue.Renderer = new SwitchRenderer("Yes", "No", switchValue, Window);
+            option.Value = switchValue;
+
+            option = Options[1];
+            TimeRollValue timeValue = new(option, TimeMetric.Seconds, 1);
+
+            timeValue.Renderer = new TimeRollRenderer(timeValue.Value, timeValue.Metric, timeValue, Window);
+            option.Value = timeValue;
 
             Select(0);
 
@@ -98,18 +107,37 @@ namespace Insomnia.View.MainMenu
             DeactivateItems();
 
             _state = MenuState.Editing;
+            Entered?.Invoke();
         }
-        public void Exit(bool saveChanges)
+        public void Exit()
         {
             Item.Select();
             ActivateItems();
 
-            if (saveChanges)
-                Item.Value.Apply();
-            else
-                Item.Value.Discard();
-
             _state = MenuState.Selecting;
+            Exited?.Invoke();
+        }
+
+        private void Apply()
+        {
+            var value = Item.Value;
+
+            if (value != null)
+            {
+                value.Apply();
+                ChangesApplied?.Invoke();
+            }
+        }
+
+        private void ChangeValue(Action<OptionValue> valueAction)
+        {
+            var value = Item.Value;
+
+            if (value != null)
+            {
+                valueAction(value);
+                ValueChanged?.Invoke();
+            }
         }
 
         private void ActivateItems()
@@ -149,8 +177,11 @@ namespace Insomnia.View.MainMenu
         {
             Keycode enter = Keycode.Return;
             Keycode escape = Keycode.Escape;
+
             Keycode up = Keycode.Up;
             Keycode down = Keycode.Down;
+            Keycode left = Keycode.Left;
+            Keycode right = Keycode.Right;
 
             _bindings = new()
             {
@@ -158,14 +189,18 @@ namespace Insomnia.View.MainMenu
                 {
                     [up] = Up,
                     [down] = Down,
-                    [enter] = Enter
+
+                    [enter] = Enter,
+                    [right] = Enter,
                 },
                 [MenuState.Editing] = new()
                 {
-                    [up] = () => Item.Value?.Up(),
-                    [down] = () => Item.Value?.Down(),
-                    [enter] = () => Exit(true),
-                    [escape] = () => Exit(false)
+                    [up] = () => ChangeValue(v => v.Up()),
+                    [down] = () => ChangeValue(v => v.Down()),
+                    [enter] = Apply,
+
+                    [escape] = Exit,
+                    [left] = Exit,
                 }
             };
         }
