@@ -19,7 +19,9 @@ namespace Insomnia.View.MainMenu
         public event Action<int> ValueChanged;
 
         private int _metricIndex = (int)metric;
+
         private int _actualValue = value;
+        private int _actualIndex = (int)metric;
 
         private static Dictionary<TimeMetric, (byte min, byte max)> MetricBounds { get; } = new()
         {
@@ -31,43 +33,54 @@ namespace Insomnia.View.MainMenu
         public override void Apply()
         {
             _actualValue = Value;
+            _actualIndex = _metricIndex;
             base.Apply();
         }
 
         public override void Discard()
         {
-            SetValue(_actualValue);
+            SetTime(_actualValue, _actualIndex);
             base.Discard();
         }
 
         public override void Down() => SetValue(Value - 1);
         public override void Up() => SetValue(Value + 1);
 
-        private void SetValue(int newValue)
+        private void SetValue(int value)
         {
             (byte min, byte max) = MetricBounds[Metric];
 
-            if (newValue > max)
+            int index = _metricIndex;
+            int metricsCount = MetricBounds.Count;
+
+            if (value > max)
             {
-                _metricIndex = (_metricIndex + 1) % MetricBounds.Count;
-                newValue = MetricBounds[Metric].min;
-
-                MetricChanged?.Invoke(Metric);
+                index = (index + 1) % metricsCount;
+                value = MetricBounds[(TimeMetric)index].min;
             }
-            else if (newValue < min)
+            else if (value < min)
             {
-                _metricIndex -= 1;
+                index = (index - 1 + metricsCount) % metricsCount;
 
-                if (_metricIndex < 0)
-                    _metricIndex = MetricBounds.Count - 1;
-
-                newValue = MetricBounds[Metric].max;
-                MetricChanged?.Invoke(Metric);
+                value = MetricBounds[(TimeMetric)index].max;
             }
-            
-            Value = newValue;
 
-            ValueChanged?.Invoke(newValue);
+            SetTime(value, index);
+        }
+
+        private void SetTime(int newValue, int metricIndex)
+        {
+            if (_metricIndex != metricIndex)
+            {
+                _metricIndex = metricIndex;
+                MetricChanged?.Invoke(Metric);    
+            }
+
+            if (Value != newValue)
+            {
+                Value = newValue;
+                ValueChanged?.Invoke(newValue);
+            }
         }
     }
 }
