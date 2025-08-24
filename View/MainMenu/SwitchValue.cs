@@ -2,7 +2,7 @@
 
 namespace Insomnia.View.MainMenu
 {
-    public class SwitchValue(Option option, bool value) : OptionValue(option)
+    public class SwitchValue(bool value, Option option) : OptionValue(option)
     {
         public bool IsOn { get; private set; } = value;
 

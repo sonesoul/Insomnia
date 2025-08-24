@@ -6,6 +6,7 @@ namespace Insomnia.View.MainMenu
     {
         public Option Option { get; } = option;
         public ValueRenderer Renderer { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         public event Action Applied;
         public event Action Discarded;

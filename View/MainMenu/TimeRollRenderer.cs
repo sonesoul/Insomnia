@@ -2,8 +2,6 @@
 using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
 using Insomnia.View.Elements;
-using System;
-using System.Drawing.Drawing2D;
 
 namespace Insomnia.View.MainMenu
 {
@@ -12,21 +10,17 @@ namespace Insomnia.View.MainMenu
         public TimeRollValue OptionValue { get; }
 
         private Label _label;
-
         private Font _font;
-
         private int _charWidth;
 
-        private Color backcolor = Palette.White;
-
-        public TimeRollRenderer(int value, TimeMetric metric, TimeRollValue optionValue, Window window) : base(window)
+        public TimeRollRenderer(TimeRollValue optionValue, Window window) : base(window)
         {
             OptionValue = optionValue;
 
             _font = Fonts.Pico8Mono;
 
             _label = new(string.Empty, _font, Palette.Yellow, window);
-            SetLabelText(value, metric);
+            SetLabelText(optionValue.Value, optionValue.Metric);
 
             var charSize = _font.CharSize;
 

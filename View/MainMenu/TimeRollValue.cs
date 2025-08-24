@@ -10,7 +10,7 @@ namespace Insomnia.View.MainMenu
         Hours = 2,
     }
 
-    public class TimeRollValue(Option option, TimeMetric metric, int value) : OptionValue(option)
+    public class TimeRollValue(TimeMetric metric, int value, Option option) : OptionValue(option)
     {
         public TimeMetric Metric => (TimeMetric)_metricIndex;
         public int Value { get; private set; } = value;

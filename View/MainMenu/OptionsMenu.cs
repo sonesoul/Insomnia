@@ -45,15 +45,15 @@ namespace Insomnia.View.MainMenu
             AddOption("Quit");
 
             Option option = Options[0];
-            SwitchValue switchValue = new(option, true);
+            SwitchValue switchValue = new(true, option);
 
             switchValue.Renderer = new SwitchRenderer("Yes", "No", switchValue, Window);
             option.Value = switchValue;
 
             option = Options[1];
-            TimeRollValue timeValue = new(option, TimeMetric.Seconds, 1);
+            TimeRollValue timeValue = new(TimeMetric.Seconds, 1, option);
 
-            timeValue.Renderer = new TimeRollRenderer(timeValue.Value, timeValue.Metric, timeValue, Window);
+            timeValue.Renderer = new TimeRollRenderer(timeValue, Window);
             option.Value = timeValue;
 
             Select(0);
@@ -90,6 +90,7 @@ namespace Insomnia.View.MainMenu
 
                 Index = index;
                 Options[Index].Select();
+                Selected?.Invoke();
             }
         }
 
@@ -150,9 +151,9 @@ namespace Insomnia.View.MainMenu
             }
         }
 
-        private void AddOption(string text)
+        private void AddOption(string name)
         {
-            Option item = new(text);
+            Option item = new(name);
             item.Renderer = new(item, Window);
 
             Options.Add(item);

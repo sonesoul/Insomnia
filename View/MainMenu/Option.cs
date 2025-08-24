@@ -15,6 +15,7 @@ namespace Insomnia.View.MainMenu
         public OptionRenderer Renderer { get; set; }
 
         public string Name { get; } = name;
+        public string Description { get; set; } = string.Empty;
 
         public bool IsActive { get => _isActive; set => SetIsActive(value); }
         public OptionState State { get => _state; set => SetState(value); }
