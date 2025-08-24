@@ -31,7 +31,7 @@ namespace Insomnia.View.MainMenu
         public void Enter() => SetState(OptionState.Entered);
         public void Select() => SetState(OptionState.Selected);
         public void Reset() => SetState(OptionState.Avaliable);
-        
+
         private void SetState(OptionState state)
         {
             if (!IsActive)

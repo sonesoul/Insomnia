@@ -17,7 +17,7 @@ namespace Insomnia.View.MainMenu
         {
             OptionValue = optionValue;
 
-            _font = Fonts.Pico8Mono;
+            _font = Fonts.Pico8;
 
             _label = new(string.Empty, _font, Palette.Yellow, window);
             SetLabelText(optionValue.Value, optionValue.Metric);

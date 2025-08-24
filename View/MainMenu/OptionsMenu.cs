@@ -22,8 +22,6 @@ namespace Insomnia.View.MainMenu
 
         public MenuRenderer Renderer { get; }
 
-        public IControllable CurrentItem;
-
         public event Action<Option> Selected;
         public event Action<Option> Entered;
         public event Action<Option> Exited;
@@ -199,5 +197,5 @@ namespace Insomnia.View.MainMenu
                 }
             };
         }
-    }    
+    }
 }

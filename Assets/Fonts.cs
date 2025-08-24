@@ -5,11 +5,11 @@ namespace Insomnia.Assets
 {
     public static class Fonts
     {
-        public static Font Pico8Mono => FontCreators[0]();
+        public static Font Pico8 => FontCreators[0]();
 
         private static Func<Font>[] FontCreators { get; } = 
         [
-            () => Load("pico-8-mono.ttf", 8),
+            () => Load("Pico-8.ttf", 10f),
         ];
 
         private static Font Load(string relativePath, float size) => new(Asset.GetAbsolutePath(relativePath), size);

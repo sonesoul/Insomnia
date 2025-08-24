@@ -1,4 +1,6 @@
 ﻿using Insomnia.Assets;
+using Insomnia.Coroutines;
+using System.Collections;
 using Insomnia.DirectMedia.Types;
 using Insomnia.View.Elements;
 using System.Collections.Generic;
@@ -13,12 +15,12 @@ namespace Insomnia.View.MainMenu
         public int ItemHeight { get; } = 7;
 
         public Point CharSize { get; }
+        private List<Option> Options => Menu.Options;
 
         private Point _arrowOffset = new(0, 10);
         private Vector2 _itemsOffset = new(5, 10);
         private Point _descriptionOffset = new(5, 0);
 
-        private List<Option> Options => Menu.Options;
         private readonly Label _arrowLabel;
         private readonly Label _descriptionLabel;
 
@@ -26,12 +28,12 @@ namespace Insomnia.View.MainMenu
 
         public MenuRenderer(OptionsMenu menu)
         {
-            Font font = Fonts.Pico8Mono;
+            Font font = Fonts.Pico8;
             CharSize = font.CharSize;
 
             Menu = menu;
             _arrowLabel = new(">", font, menu.Window);
-            _descriptionLabel = new("aboba", font, Palette.DarkGray, menu.Window);
+            _descriptionLabel = new("", font, Palette.Indigo, menu.Window);
 
             menu.Window.Draw += Draw;
 

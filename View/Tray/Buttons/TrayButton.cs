@@ -11,7 +11,7 @@ namespace Insomnia.View.Tray.Buttons
 
         protected TrayButton(string text, Window window)
         {
-            Button = new Button(text, Fonts.Pico8Mono, window);
+            Button = new Button(text, Fonts.Pico8, window);
             Window = window;
 
             Button.Renderer.Label.Position = new(6, 3);

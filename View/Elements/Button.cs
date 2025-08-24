@@ -19,7 +19,7 @@ namespace Insomnia.View.Elements
 
         public Button(Window window) : base(window)
         {
-            Renderer = new("Button", Fonts.Pico8Mono, this);
+            Renderer = new("Button", Fonts.Pico8, this);
         }
         public Button(string text, Font font, Window window) : base(window)
         {

@@ -24,8 +24,8 @@ namespace Insomnia.View.MainMenu
             optionValue.TurnedOn += () => SetLabel(isOn: true);
             optionValue.TurnedOff += () => SetLabel(isOn: false);
 
-            _label = new(string.Empty, Fonts.Pico8Mono, window);
-            Point charSize = Fonts.Pico8Mono.CharSize;
+            _label = new(string.Empty, Fonts.Pico8, window);
+            Point charSize = Fonts.Pico8.CharSize;
             Size = new Point(charSize.X * 4, charSize.Y);
 
             SetLabel(optionValue.IsOn);

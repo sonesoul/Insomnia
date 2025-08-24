@@ -24,7 +24,7 @@ namespace Insomnia.View.MainMenu
         {
             Option = option;
 
-            _label = new(option.Name, Fonts.Pico8Mono, Palette.LightGray, window);
+            _label = new(option.Name, Fonts.Pico8, Palette.LightGray, window);
 
             Option.StateChanged += StateChanged;
 
