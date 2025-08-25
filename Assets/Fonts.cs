@@ -9,7 +9,7 @@ namespace Insomnia.Assets
 
         private static Func<Font>[] FontCreators { get; } = 
         [
-            () => Load("Pico-8.ttf", 10f),
+            () => Load("Pico-8.ttf", 12f),
         ];
 
         private static Font Load(string relativePath, float size) => new(Asset.GetAbsolutePath(relativePath), size);
