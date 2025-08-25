@@ -7,7 +7,6 @@ namespace Insomnia
         public Point MousePosition { get; private set; } = new();
         public int OffsetPx { get; set; } = 10; 
         public TimeSpan IdleThreshold { get; set; } = TimeSpan.FromSeconds(1);
-        public float MoveDelaySeconds { get; set; } = 1f;
         public bool IsActive { get => _isActive; set => SetActive(value); } 
 
         public event Action<bool> ActiveStateChanged; 
