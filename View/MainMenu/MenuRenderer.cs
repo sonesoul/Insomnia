@@ -1,9 +1,9 @@
 ﻿using Insomnia.Assets;
-using Insomnia.Coroutines;
-using System.Collections;
 using Insomnia.DirectMedia.Types;
 using Insomnia.View.Elements;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Insomnia.View.MainMenu
 {
@@ -21,25 +21,40 @@ namespace Insomnia.View.MainMenu
         private Vector2 _itemsOffset = new(5, 10);
         private Point _descriptionOffset = new(5, 0);
 
-        private readonly Label _arrowLabel;
+        private readonly Label _arrow;
+        private readonly Label _filledArrow;
+
         private readonly Label _descriptionLabel;
 
-        private bool _changesUnapplied = true;
+        private readonly Label _versionLabel;
+
+        private bool _changesApplied = true;
+
+
+        private const string FilledArrowSymbol = "Û";
+        private const string ArrowSymbol = ">";
 
         public MenuRenderer(OptionsMenu menu)
         {
             Font font = Fonts.Pico8;
             CharSize = font.CharSize;
 
+            var window = menu.Window;
+
             Menu = menu;
-            _arrowLabel = new(">", font, menu.Window);
-            _descriptionLabel = new("", font, Palette.Indigo, menu.Window);
+            _arrow = new(ArrowSymbol, font, window);
+            _filledArrow = new(FilledArrowSymbol, font, window);
+            _descriptionLabel = new(string.Empty, font, Palette.Indigo, window);
+
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            
+            _versionLabel = new($"v{version.Major}.{version.Minor}", font, Palette.DarkGray, window);
 
             menu.Window.Draw += Draw;
 
-            menu.ChangesApplied += () => _changesUnapplied = true;
-            menu.ValueChanged += () => _changesUnapplied = false;
-            menu.ChangesDiscarded += () => _changesUnapplied = true;
+            menu.ChangesApplied += () => _changesApplied = true;
+            menu.ValueChanged += () => _changesApplied = false;
+            menu.ChangesDiscarded += () => _changesApplied = true;
 
             menu.Selected += o => _descriptionLabel.Text = o.Description;
             menu.Entered += o => _descriptionLabel.Text = o.Value.Description;
@@ -52,16 +67,9 @@ namespace Insomnia.View.MainMenu
                     (int)Position.X, 
                     (int)Position.Y + (ItemHeight * Menu.Index)) + _arrowOffset;
 
-            _arrowLabel.Draw(arrowPos, renderer);
-            
-            if (_changesUnapplied)
-            {
-                for (int i = 0; i < 2; i++)
-                {
-                    arrowPos.X--;
-                    _arrowLabel.Draw(arrowPos, renderer);
-                }
-            }
+            Action<Point, Renderer> drawArrow = _changesApplied ? _filledArrow.Draw : _arrow.Draw;
+
+            drawArrow(arrowPos, renderer);
 
             for (int i = 0; i < Options.Count; i++)
             {
@@ -74,6 +82,11 @@ namespace Insomnia.View.MainMenu
             }
 
             _descriptionLabel.Draw(Position.ToPoint() + _descriptionOffset, renderer);
+
+            var pos = Menu.Window.Source.Size;
+            pos.X = 0;
+            pos.Y -= CharSize.Y;
+            _versionLabel.Draw(pos, renderer);
         }
     }
 }
