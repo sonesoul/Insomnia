@@ -1,9 +1,10 @@
 ﻿using Insomnia.Assets;
 using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
+using Insomnia.Menu.Values;
 using Insomnia.View.Elements;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu.Renderers
 {
     public class TimeRollRenderer : ValueRenderer
     {
@@ -34,7 +35,7 @@ namespace Insomnia.View.MainMenu
 
         public override void Draw(Renderer renderer, Vector2 position)
         {
-            int x = (int)position.X + (Size.X / 2) - (int)(_label.Size.X / 2);
+            int x = (int)position.X + Size.X / 2 - (int)(_label.Size.X / 2);
             int y = (int)position.Y;
 
             Point pos = new(x, y);

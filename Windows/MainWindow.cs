@@ -1,5 +1,5 @@
 ﻿using Insomnia.DirectMedia;
-using Insomnia.View.MainMenu;
+using Insomnia.Menu;
 using static SDL3.SDL;
 
 namespace Insomnia.Windows

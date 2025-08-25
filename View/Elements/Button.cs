@@ -1,6 +1,7 @@
 ﻿using Insomnia.Assets;
 using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
+using Insomnia.View.Renderers;
 using SDL3;
 using System;
 

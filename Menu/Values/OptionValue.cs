@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Insomnia.Menu.Renderers;
+using System;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu.Values
 {
     public abstract class OptionValue(Option option)
     {
@@ -8,7 +9,7 @@ namespace Insomnia.View.MainMenu
         public ValueRenderer Renderer { get; set; }
         public string Description { get; set; } = string.Empty;
 
-        public event Action Applied;
+        public Action Applied;
         public event Action Discarded;
 
         public virtual void Apply() => Applied?.Invoke();

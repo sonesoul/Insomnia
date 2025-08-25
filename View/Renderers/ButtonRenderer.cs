@@ -1,8 +1,9 @@
 ﻿using Insomnia.Assets;
 using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
+using Insomnia.View.Elements;
 
-namespace Insomnia.View.Elements
+namespace Insomnia.View.Renderers
 {
     public class ButtonRenderer : IDrawable
     {

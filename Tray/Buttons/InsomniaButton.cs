@@ -1,6 +1,6 @@
 ﻿using Insomnia.DirectMedia;
 
-namespace Insomnia.View.Tray.Buttons
+namespace Insomnia.Tray.Buttons
 {
     public class InsomniaButton(Window window) : TrayButton(Text, window)
     {

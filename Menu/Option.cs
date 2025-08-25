@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Insomnia.Menu.Renderers;
+using Insomnia.Menu.Values;
+using System;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu
 {
     public enum OptionState
     {

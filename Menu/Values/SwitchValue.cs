@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu.Values
 {
     public class SwitchValue(bool value, Option option) : OptionValue(option)
     {

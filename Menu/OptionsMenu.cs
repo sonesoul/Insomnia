@@ -1,10 +1,13 @@
 ﻿using Insomnia.DirectMedia;
+using Insomnia.Menu.Renderers;
+using Insomnia.Menu.Values;
 using System;
 using System.Collections.Generic;
+using Insomnia.Menu.Options;
 using Event = SDL3.SDL.Event;
 using Keycode = SDL3.SDL.Keycode;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu
 {
     public enum MenuState
     {
@@ -40,22 +43,12 @@ namespace Insomnia.View.MainMenu
             
             InitBindings();
 
-            AddOption("State", "Program working state");
-            AddOption("Delay", "Delay between moves");
-            AddOption("Start", "Start program with system");
-            AddOption("Quit", "Quit the program");
-
-            Option option = Options[0];
-            SwitchValue switchValue = new(true, option);
-
-            switchValue.Renderer = new SwitchRenderer("On", "Off", switchValue, Window);
-            option.Value = switchValue;
-
-            option = Options[1];
-            TimeRollValue timeValue = new(TimeMetric.Seconds, 1, option);
-
-            timeValue.Renderer = new TimeRollRenderer(timeValue, Window);
-            option.Value = timeValue;
+            Options.AddRange([
+                new StateOption(window),
+                new DelayOption(window), 
+                new AutorunOption(window),
+                new QuitOption(window),
+            ]);
 
             Renderer = new(this);
 
@@ -152,18 +145,6 @@ namespace Insomnia.View.MainMenu
 
                 Options[i].IsActive = enabled;
             }
-        }
-
-        private void AddOption(string name, string description)
-        {
-            Option item = new(name)
-            {
-                Description = description,
-            };
-
-            item.Renderer = new(item, Window);
-
-            Options.Add(item);
         }
 
         private void InitBindings()

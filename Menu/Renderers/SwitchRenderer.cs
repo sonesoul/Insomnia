@@ -1,9 +1,10 @@
 ﻿using Insomnia.Assets;
 using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
+using Insomnia.Menu.Values;
 using Insomnia.View.Elements;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu.Renderers
 {
     public class SwitchRenderer : ValueRenderer
     {
@@ -11,9 +12,16 @@ namespace Insomnia.View.MainMenu
 
         private readonly Label _label;
 
-        public string PositiveString { get; set; }
+        public string PositiveString { get; set; } 
         public string NegativeString { get; set; }
 
+        public const string DefaultPositive = "On";
+        public const string DefaultNegative = "Off";
+
+        public SwitchRenderer(SwitchValue optionValue, Window window) : this(DefaultPositive, DefaultNegative, optionValue, window)
+        {
+            
+        }
         public SwitchRenderer(string positive, string negative, SwitchValue optionValue, Window window) : base(window)
         {
             PositiveString = positive;
@@ -33,7 +41,7 @@ namespace Insomnia.View.MainMenu
 
         public override void Draw(Renderer renderer, Vector2 position)
         {
-            int x = (int)position.X + (Size.X / 2) - (int)(_label.Size.X / 2);
+            int x = (int)position.X + Size.X / 2 - (int)(_label.Size.X / 2);
             int y = (int)position.Y;
 
             Point pos = new(x, y);

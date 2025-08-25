@@ -2,7 +2,7 @@
 using Insomnia.DirectMedia;
 using Insomnia.View.Elements;
 
-namespace Insomnia.View.Tray.Buttons
+namespace Insomnia.Tray.Buttons
 {
     public abstract class TrayButton
     {

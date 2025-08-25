@@ -1,7 +1,7 @@
 ﻿using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
+using Insomnia.Tray.Buttons;
 using Insomnia.View.Elements;
-using Insomnia.View.Tray.Buttons;
 using System.Collections.Generic;
 
 namespace Insomnia.View

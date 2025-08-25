@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Insomnia.View.Tray
+namespace Insomnia.Tray
 {
     public class TrayIcon
     {

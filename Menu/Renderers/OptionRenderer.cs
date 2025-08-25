@@ -2,11 +2,12 @@
 using Insomnia.Coroutines;
 using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
+using Insomnia.Menu.Values;
 using Insomnia.View.Elements;
 using System;
 using System.Collections;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu.Renderers
 {
     public class OptionRenderer
     {
@@ -88,8 +89,8 @@ namespace Insomnia.View.MainMenu
             
             yield return StepTask.Yields.Interpolate(e =>
             {
-                CurrentOffset = Vector2.Lerp(start, end, (1 - MathF.Pow(1 - e, 2)));
-                return e + (Time.Delta / 0.2f);
+                CurrentOffset = Vector2.Lerp(start, end, 1 - MathF.Pow(1 - e, 2));
+                return e + Time.Delta / 0.2f;
             });
         }
     }

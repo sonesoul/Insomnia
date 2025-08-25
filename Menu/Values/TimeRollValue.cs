@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu.Values
 {
     public enum TimeMetric : byte
     {

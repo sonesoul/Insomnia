@@ -1,7 +1,7 @@
 ﻿using Insomnia.DirectMedia;
 using Insomnia.DirectMedia.Types;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu.Renderers
 {
     public abstract class ValueRenderer(Window window)
     {

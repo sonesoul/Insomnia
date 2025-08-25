@@ -10,13 +10,11 @@ namespace Insomnia
 
         public static void Add()
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(KeyPath, true))
-            {
-                string dir = Environment.CurrentDirectory;
-                string path = Path.Combine(dir, $"{Program.Name}.exe");
+            using RegistryKey key = Registry.CurrentUser.OpenSubKey(KeyPath, true);
+            string dir = Environment.CurrentDirectory;
+            string path = Path.Combine(dir, $"{Program.Name}.exe");
 
-                key?.SetValue(Program.Name, path);
-            }
+            key?.SetValue(Program.Name, path);
         }
 
         public static void Remove()

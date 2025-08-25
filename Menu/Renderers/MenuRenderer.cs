@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Insomnia.View.MainMenu
+namespace Insomnia.Menu.Renderers
 {
     public class MenuRenderer
     {
@@ -65,7 +65,7 @@ namespace Insomnia.View.MainMenu
         {
             Point arrowPos = new Point(
                     (int)Position.X, 
-                    (int)Position.Y + (ItemHeight * Menu.Index)) + _arrowOffset;
+                    (int)Position.Y + ItemHeight * Menu.Index) + _arrowOffset;
 
             Action<Point, Renderer> drawArrow = _changesApplied ? _filledArrow.Draw : _arrow.Draw;
 
@@ -75,7 +75,7 @@ namespace Insomnia.View.MainMenu
             {
                 Vector2 position = new Vector2(
                         Position.X, 
-                        Position.Y + (ItemHeight * i)) + _itemsOffset;
+                        Position.Y + ItemHeight * i) + _itemsOffset;
 
                 var item = Options[i].Renderer;
                 item.Draw(renderer, position);
