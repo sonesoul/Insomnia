@@ -1,18 +1,15 @@
-﻿global using Insomnia.Structures;
-global using Color = Insomnia.Structures.Color;
+﻿global using Color = Insomnia.Structures.Color;
 global using FRectangle = Insomnia.Structures.FRectangle;
 global using Point = Insomnia.Structures.Point;
 global using Rectangle = Insomnia.Structures.Rectangle;
 global using Vector2 = Insomnia.Structures.Vector2;
+
 using Insomnia.Coroutines;
 using Insomnia.DirectMedia;
-using Insomnia.View.Tray;
+using Insomnia.Tray;
 using Insomnia.Windows;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Pipes;
-using System.Threading;
 
 namespace Insomnia
 {
@@ -23,7 +20,8 @@ namespace Insomnia
         public static TrayIcon TrayIcon { get; private set; }
         public static AwakeKeeper AwakeKeeper { get; private set; } 
         public static bool IsWorking { get; set; } = true;
-        
+
+        public const string Name = "Insomnia";
 
         public const int FPS = 60;
         public const int FrameTime = 1000 / FPS;

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.IO.Pipes;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +7,6 @@ namespace Insomnia
 {
     public class Synchronizer
     {
-        public const string Name = $"{nameof(Insomnia)}";
         public const string PipeName = $"{nameof(Insomnia)}Pipe";
 
         public Mutex Mutex { get; private set; } 
@@ -21,7 +16,7 @@ namespace Insomnia
 
         public Synchronizer(out bool createdNew)
         {
-            Mutex = new(false, Name, out createdNew);
+            Mutex = new(false, Program.Name, out createdNew);
             
             if (!createdNew)
             {
