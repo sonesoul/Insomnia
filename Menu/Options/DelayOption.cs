@@ -22,12 +22,12 @@ namespace Insomnia.Menu.Options
             TimeMetric metric = TimeMetric.Seconds;
             int timeValue = thresholdSpan.Seconds;
 
-            if (thresholdSpan.Minutes > 1)
+            if (thresholdSpan.Minutes >= 1)
             {
                 timeValue = thresholdSpan.Minutes;
                 metric = TimeMetric.Minutes;
             }
-            else if (thresholdSpan.Hours > 1)
+            else if (thresholdSpan.Hours >= 1)
             {
                 timeValue = thresholdSpan.Hours;
                 metric = TimeMetric.Hours;
