@@ -13,8 +13,9 @@ namespace Insomnia.Tray
             NotifyIcon = new()
             {
                 Visible = true,
-                Icon = Icons.Active,
             };
+            OnActiveStateChanged(awakeKeeper.IsActive);
+            
             NotifyIcon.MouseClick += OnIconClick;
             NotifyIcon.MouseDoubleClick += OnIconDoubleClick;
             

@@ -17,7 +17,23 @@ namespace Insomnia.Menu.Options
         {
             Description = OptionDescription;
 
-            TimeRollValue value = new(TimeMetric.Minutes, 1, this);
+            var thresholdSpan = AwakeKeeper.IdleThreshold;
+
+            TimeMetric metric = TimeMetric.Seconds;
+            int timeValue = thresholdSpan.Seconds;
+
+            if (thresholdSpan.Minutes > 1)
+            {
+                timeValue = thresholdSpan.Minutes;
+                metric = TimeMetric.Minutes;
+            }
+            else if (thresholdSpan.Hours > 1)
+            {
+                timeValue = thresholdSpan.Hours;
+                metric = TimeMetric.Hours;
+            }
+
+            TimeRollValue value = new(metric, timeValue, this);
             value.Renderer = new TimeRollRenderer(value, window);
             value.Applied += () => SetDelay(value.Metric, value.Value);
             value.Description = ValueDescription;

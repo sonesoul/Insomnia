@@ -18,7 +18,7 @@ namespace Insomnia
         public static MainWindow MainWindow { get; private set; }
         public static TrayWindow TrayWindow { get; private set; }
         public static TrayIcon TrayIcon { get; private set; }
-        public static AwakeKeeper AwakeKeeper { get; private set; } 
+        public static AwakeKeeper AwakeKeeper { get; private set; }
         public static bool IsWorking { get; set; } = true;
 
         public const string Name = "Insomnia";
@@ -30,7 +30,8 @@ namespace Insomnia
 
         private static IReadOnlyList<Window> Instances { get; } = Window.GetInstances();
         private static Synchronizer Synchronizer { get; set; }
-        
+        public static Settings Settings { get; private set; }
+
         private static void Main()
         {
             Synchronizer = new(out bool createdNew);
@@ -39,6 +40,9 @@ namespace Insomnia
             {
                 return;
             }
+
+            Settings = new();
+            Settings.LoadState();
 
             SDL3.TTF.Init();   
             InitializeComponents();
@@ -67,7 +71,23 @@ namespace Insomnia
 
         private static void InitializeComponents()
         {
-            AwakeKeeper = new(); 
+            AwakeKeeper = new()
+            {
+                IsActive = Settings.IsKeeperActive,
+                IdleThreshold = Settings.IdleThreshold,
+            };
+            AwakeKeeper.IdleThresholdChanged += t => 
+            {
+                Settings.IdleThreshold = t;
+                Settings.SaveState();
+            };
+
+            AwakeKeeper.ActiveStateChanged += a =>
+            {
+                Settings.IsKeeperActive = a;
+                Settings.SaveState();
+            };
+
             MainWindow = new();
             TrayWindow = new();
             
