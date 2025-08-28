@@ -8,6 +8,9 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Content\Icon_Active.ico</ApplicationIcon>
+    <Version>$(VersionPrefix)</Version>
+    <FileVersion>1.0.1</FileVersion>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

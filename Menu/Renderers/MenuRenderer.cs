@@ -11,7 +11,7 @@ namespace Insomnia.Menu.Renderers
     {
         public OptionsMenu Menu { get; }
 
-        public Vector2 Position { get; set; } = new(0, 0);
+        public Vector2 Position { get; set; } = new(0, 5);
         public int ItemHeight { get; } = 7;
 
         public Point CharSize { get; }
@@ -31,7 +31,7 @@ namespace Insomnia.Menu.Renderers
         private bool _changesApplied = true;
 
 
-        private const string FilledArrowSymbol = "Û";
+        private readonly static string FilledArrowSymbol = $"{(char)0x00DB}";
         private const string ArrowSymbol = ">";
 
         public MenuRenderer(OptionsMenu menu)
@@ -73,20 +73,20 @@ namespace Insomnia.Menu.Renderers
 
             for (int i = 0; i < Options.Count; i++)
             {
-                Vector2 position = new Vector2(
+                Vector2 optionPos = new Vector2(
                         Position.X, 
                         Position.Y + ItemHeight * i) + _itemsOffset;
 
                 var item = Options[i].Renderer;
-                item.Draw(renderer, position);
+                item.Draw(renderer, optionPos);
             }
 
             _descriptionLabel.Draw(Position.ToPoint() + _descriptionOffset, renderer);
 
-            var pos = Menu.Window.Source.Size;
-            pos.X = 0;
-            pos.Y -= CharSize.Y;
-            _versionLabel.Draw(pos, renderer);
+            Point versionPos = Menu.Window.Source.Size;
+            versionPos.X = 5;
+            versionPos.Y -= CharSize.Y + 5;
+            _versionLabel.Draw(versionPos, renderer);
         }
     }
 }
