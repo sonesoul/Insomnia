@@ -3,7 +3,7 @@
 Keep your "Online" status and don't let your computer sleep with this simple application! It imitates pretty small mouse activity and most programs can handle it like this activity is yours. 
 
 ## Installation
-You don't need to install the program, so go to Releases page, select the latest release, then click `Insomnia.zip`, open archive whenever you want and it's ready to use! 
+You don't need to install the program, so go to Releases page, select the latest release, then click `Insomnia.zip`, open archive anywhere you want and it's ready to use! 
 
 ## How to use?
  Open the program by running `Insomnia.exe`. To navigate between options use `[↑]` and `[↓]`. 
@@ -32,7 +32,7 @@ You don't need to install the program, so go to Releases page, select the latest
   </p>
  
  By pressing `[LMB]` twice at this icon you can show and hide main window.  
- `[RMB]` at the icon will open the tray menu. In this menu hover and press buttons with your mouse.  
+ `[RMB]` at the icon will open the tray menu. _In this menu hover and press buttons with your mouse_.  
  
  <p align="left">
    <img src="examples/TrayMenu.png">
