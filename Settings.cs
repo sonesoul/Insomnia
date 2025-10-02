@@ -8,9 +8,10 @@ namespace Insomnia
         public bool IsKeeperActive { get; set; }
         public TimeSpan IdleThreshold { get; set; }
 
-        public string FilePath { get; } = $"{Path.Combine(Environment.CurrentDirectory, Name)}";
+        public string FilePath { get; } = $"{Path.Combine(Program.WorkingDirectory, Name)}";
         public const string Name = "settings.txt";
         public const char SplitSymbol = '=';
+
         public Settings()
         {
             if (!File.Exists(FilePath))

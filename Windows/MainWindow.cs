@@ -19,9 +19,16 @@ namespace Insomnia.Windows
             Window.IsVisible = !Window.IsVisible;
         }
 
-        public MainWindow()
+        public MainWindow(bool hidden = false)
         {
-            Window = new(Name, Source, Destination, WindowFlags.OpenGL);
+            WindowFlags flags = WindowFlags.OpenGL;
+
+            if (hidden)
+            {
+                flags |= WindowFlags.Hidden;
+            }
+
+            Window = new(Name, Source, Destination, flags);
             Window.Event += OnEvent;
 
             Menu = new(Window);

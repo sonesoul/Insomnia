@@ -10,6 +10,8 @@ using Insomnia.Tray;
 using Insomnia.Windows;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Insomnia
 {
@@ -32,7 +34,12 @@ namespace Insomnia
         private static Synchronizer Synchronizer { get; set; }
         public static Settings Settings { get; private set; }
 
-        private static void Main()
+        public static string WorkingDirectory => Path.GetDirectoryName(Environment.ProcessPath);
+        public static string ProcessPath => Environment.ProcessPath;
+
+        public static string SilentArgument => "-silent";
+
+        private static void Main(string[] args)
         {
             Synchronizer = new(out bool createdNew);
 
@@ -44,8 +51,8 @@ namespace Insomnia
             Settings = new();
             Settings.LoadState();
 
-            SDL3.TTF.Init();   
-            InitializeComponents();
+            SDL3.TTF.Init();
+            InitializeComponents(args.ToList().Contains(SilentArgument));
 
             while (!_shouldExit && Instances.Count > 0)
             {
@@ -61,7 +68,9 @@ namespace Insomnia
                 uint frameDuration = (uint)(Time.Now() - Time.LastTicks);
 
                 if (frameDuration < FrameTime)
+                {
                     Window.Delay(FrameTime - frameDuration);
+                }
             }
 
             TrayIcon.Hide();
@@ -69,7 +78,7 @@ namespace Insomnia
 
         public static void Quit() => _shouldExit = true;
 
-        private static void InitializeComponents()
+        private static void InitializeComponents(bool windowHidden)
         {
             AwakeKeeper = new()
             {
@@ -81,14 +90,13 @@ namespace Insomnia
                 Settings.IdleThreshold = t;
                 Settings.SaveState();
             };
-
             AwakeKeeper.ActiveStateChanged += a =>
             {
                 Settings.IsKeeperActive = a;
                 Settings.SaveState();
             };
 
-            MainWindow = new();
+            MainWindow = new(windowHidden);
             TrayWindow = new();
             
             TrayIcon = new(AwakeKeeper);

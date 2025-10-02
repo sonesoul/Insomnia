@@ -1,20 +1,17 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.IO;
 
 namespace Insomnia
 {
     public static class Autorun
     {
-        private const string KeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
+        private const string KeyPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 
         public static void Add()
         {
             using RegistryKey key = Registry.CurrentUser.OpenSubKey(KeyPath, true);
-            string dir = Environment.CurrentDirectory;
-            string path = Path.Combine(dir, $"{Program.Name}.exe");
+            string path = Program.ProcessPath;
 
-            key?.SetValue(Program.Name, path);
+            key?.SetValue(Program.Name, $"\"{path}\" {Program.SilentArgument}");
         }
 
         public static void Remove()
